@@ -18,5 +18,10 @@ namespace HearthstoneDeckTracker.Utilities
         {
             return ConfigurationManager.AppSettings["HearthstoneZoneLogFile"];
         }
+
+        public static int LogFileUpdateDelay()
+        {
+            return int.Parse(ConfigurationManager.AppSettings["LogFileUpdateDelay"]);
+        }
     }
 }

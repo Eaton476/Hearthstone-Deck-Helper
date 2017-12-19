@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using HearthstoneDeckTracker.Interfaces;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
 
 namespace HearthstoneDeckTracker.Tracker
 {
-    public class ZoneLogFileReader : IWatchable
+    public class ZoneLogFileReader
     {
         private FileSystemWatcher _watcher;
         private readonly string _logFile;

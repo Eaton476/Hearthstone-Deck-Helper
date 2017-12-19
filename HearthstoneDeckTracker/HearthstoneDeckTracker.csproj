@@ -65,13 +65,14 @@
     </ApplicationDefinition>
     <Compile Include="Data\API.cs" />
     <Compile Include="Model\CardCollection.cs" />
-    <Compile Include="Interfaces\IWatchable.cs" />
     <Compile Include="Model\Interaction.cs" />
-    <Compile Include="Tracker\PowerLogFileReader.cs" />
+    <Compile Include="Tracker\LogEntry.cs" />
+    <Compile Include="Tracker\LogFileMonitor.cs" />
     <Compile Include="Tracker\Screenshot.cs" />
     <Compile Include="Tracker\ZoneLogFileReader.cs" />
     <Compile Include="Utilities\Config.cs" />
     <Compile Include="Utilities\Log.cs" />
+    <Compile Include="Utilities\LogTemplates.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -115,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forms\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\Newtonsoft.Json.dll" />
