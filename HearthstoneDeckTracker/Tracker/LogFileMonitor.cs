@@ -13,33 +13,34 @@ namespace HearthstoneDeckTracker.Tracker
 {
     public class LogFileMonitor
     {
-        private string _name;
+	    public readonly LogFileMonitorSettings Settings;
         private string _filepath;
         private long _offset;
         private bool _running;
         private bool _stop;
-        private bool _fileExists;
         private DateTime _startingPoint;
-        private ConcurrentQueue<LogEntry> _logs;
+        private ConcurrentQueue<LogEntry> _logs = new ConcurrentQueue<LogEntry>();
         private Thread _thread;
 
         private const int BufferSize = 4096;
 
-        public LogFileMonitor(string name, string filepath)
+        public event Action<string> OnLogFileFound;
+        public event Action<string> OnLogLineIgnored;
+        public event Action<Exception> OnLogLineError;
+
+        public LogFileMonitor(LogFileMonitorSettings settings)
         {
-            _name = name;
-            _filepath = filepath;
+            Settings = settings;
         }
 
         public void Begin(DateTime startingPoint)
         {
             if (!_running)
             {
-                _filepath = Path.Combine(Config.HearthstoneLogDirectory(), _name + ".log");
+                _filepath = Path.Combine(Config.HearthstoneLogDirectory(), Settings.Name + ".log");
                 _startingPoint = startingPoint;
                 if (File.Exists(_filepath))
                 {
-                    _fileExists = true;
                     _stop = false;
                     _offset = 0;
                     _thread = new Thread(MonitorLogFile)
@@ -52,18 +53,42 @@ namespace HearthstoneDeckTracker.Tracker
                     }
                     catch (Exception e)
                     {
-                        Log.Write(e);
+                        OnLogLineError?.Invoke(e);
                     }
                 }
                 else
                 {
                     FileNotFoundException exception = new FileNotFoundException("Unable to start monitoring specified logfile", _filepath);
-                    Log.Write(exception);
+                    OnLogLineError?.Invoke(exception);
                 }
             }
         }
 
-        private void MonitorLogFile()
+	    public async Task Stop()
+	    {
+		    _stop = true;
+		    while (_running || _thread == null || _thread.ThreadState == ThreadState.Unstarted)
+		    {
+				await Task.Delay(50);
+			}
+			    
+		    _logs = new ConcurrentQueue<LogEntry>();
+		    await Task.Factory.StartNew(() => _thread?.Join());
+	    }
+
+	    public IEnumerable<LogEntry> Collect()
+	    {
+		    var count = _logs.Count;
+		    for (var i = 0; i < count; i++)
+		    {
+			    if (_logs.TryDequeue(out var line))
+			    {
+				    yield return line;
+			    }
+		    }
+	    }
+
+		private void MonitorLogFile()
         {
             _running = true;
             if (File.Exists(_filepath))
@@ -89,16 +114,26 @@ namespace HearthstoneDeckTracker.Tracker
                                     var next = sr.Peek();
                                     if (!sr.EndOfStream && !(next == 'D' || next == 'W'))
                                         break;
-                                    var logLine = new LogEntry(_name, line);
-                                    if (logLine.Time >= _startingPoint)
+                                    var logLine = new LogEntry(Settings.Name, line);
+                                    if (Settings.StartFilters != null && (Settings.ContainingFilters != null
+                                                                          && (!Settings.HasFilters ||
+                                                                              Settings.StartFilters.Any(x =>
+                                                                                  logLine.LineContent.StartsWith(x))
+                                                                              || Settings.ContainingFilters.Any(x =>
+                                                                                  logLine.LineContent.Contains(x)) &&
+                                                                              logLine.Time >= _startingPoint)))
                                     {
+                                        OnLogFileFound?.Invoke($"MONITOR '{Settings.Name} - Successfully queued {logLine.LineContent}");
                                         _logs.Enqueue(logLine);
                                     }
-                                        
+                                    else
+                                    {
+                                        OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Didn't match filters {logLine.LineContent}");
+                                    }
                                 }
                                 else
                                 {
-                                    Log.Write($"Log ignored - {_name} : {line}", Log.Type.Info);
+                                    OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Ignored {line}'");
                                 }
                                 _offset += Encoding.UTF8.GetByteCount(line + Environment.NewLine);
                             }
@@ -112,7 +147,7 @@ namespace HearthstoneDeckTracker.Tracker
             {
                 _running = false;
                 FileNotFoundException exception = new FileNotFoundException("Unable to start monitoring specified logfile", _filepath);
-                Log.Write(exception);
+                OnLogLineError?.Invoke(exception);
             }
         }
 
@@ -145,7 +180,7 @@ namespace HearthstoneDeckTracker.Tracker
                         {
                             if (string.IsNullOrWhiteSpace(lines[i].Trim('\0')))
                                 continue;
-                            var logLine = new LogEntry(_name, lines[i]);
+                            var logLine = new LogEntry(Settings.Name, lines[i]);
                             if (logLine.Time < _startingPoint)
                             {
                                 var negativeOffset = lines.Take(i + 1).Sum(x => Encoding.UTF8.GetByteCount(x + Environment.NewLine));
@@ -157,6 +192,46 @@ namespace HearthstoneDeckTracker.Tracker
                 }
             }
             _offset = 0;
+        }
+
+        public DateTime FindEntryPoint(string logDirectory, string[] str)
+        {
+            var fileInfo = new FileInfo(Path.Combine(logDirectory, Settings.Name + ".log"));
+            if (fileInfo.Exists)
+            {
+                var targets = str.Select(x => new string(x.Reverse().ToArray())).ToList();
+                using (var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var sr = new StreamReader(fs, Encoding.ASCII))
+                {
+                    var offset = 0;
+                    while (offset < fs.Length)
+                    {
+                        offset += BufferSize;
+                        var buffer = new char[BufferSize];
+                        fs.Seek(Math.Max(fs.Length - offset, 0), SeekOrigin.Begin);
+                        sr.ReadBlock(buffer, 0, BufferSize);
+                        var skip = 0;
+                        for (var i = 0; i < BufferSize; i++)
+                        {
+                            skip++;
+                            if (buffer[i] == '\n')
+                                break;
+                        }
+                        if (skip >= BufferSize)
+                            continue;
+                        offset -= skip;
+                        var reverse = new string(buffer.Skip(skip).Reverse().ToArray());
+                        var targetOffsets = targets.Select(x => reverse.IndexOf(x, StringComparison.Ordinal)).Where(x => x > -1).ToList();
+                        var targetOffset = targetOffsets.Any() ? targetOffsets.Min() : -1;
+                        if (targetOffset != -1)
+                        {
+                            var line = new string(reverse.Substring(targetOffset).TakeWhile(c => c != '\n').Reverse().ToArray());
+                            return new LogEntry("", line).Time;
+                        }
+                    }
+                }
+            }
+            return DateTime.MinValue;
         }
     }
 }

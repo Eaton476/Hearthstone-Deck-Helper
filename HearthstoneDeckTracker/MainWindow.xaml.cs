@@ -1,8 +1,5 @@
-﻿using HearthstoneDeckTracker.Data;
-using HearthstoneDeckTracker.Tracker;
-using HearthstoneDeckTracker.Utilities;
+﻿using HearthstoneDeckTracker.Tracker;
 using System.Windows;
-using HearthstoneDeckTracker.Interfaces;
 
 namespace HearthstoneDeckTracker
 {
@@ -16,10 +13,12 @@ namespace HearthstoneDeckTracker
             InitializeComponent();
 
             //API.GetAllCardData();
-            ZoneLogFileReader zoneLogFileReader = new ZoneLogFileReader(Config.HearthstoneLogDirectory(), Config.HearthstoneZoneLogFile());
-            zoneLogFileReader.WatchLogFile();
+            //ZoneLogFileReader zoneLogFileReader = new ZoneLogFileReader(Config.HearthstoneLogDirectory(), Config.HearthstoneZoneLogFile());
+            //zoneLogFileReader.WatchLogFile();
+            //ListViewInteractions.ItemsSource = zoneLogFileReader.Interactions;
 
-            ListViewInteractions.ItemsSource = zoneLogFileReader.Interactions;
+			LogFileHandler handler = new LogFileHandler();
+			handler.Start();
         }
     }
 }

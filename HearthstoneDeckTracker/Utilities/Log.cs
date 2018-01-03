@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using HearthstoneDeckTracker.Tracker;
 
 namespace HearthstoneDeckTracker.Utilities
 {
@@ -35,15 +36,23 @@ namespace HearthstoneDeckTracker.Utilities
         public static void Write(Exception e)
         {
             string date = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            string output = $"{date} | ERROR: {e.StackTrace}";
+            string output = $"{date} | ERROR: {e.StackTrace}{Environment.NewLine}";
 
             WriteToFile(output);
         }
 
+	    public static void Write(LogEntry entry)
+	    {
+			string date = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+		    string output = $"{date} | Processed entry {entry.LineContent} at {entry.Time.ToShortTimeString()}{Environment.NewLine}";
+
+			WriteToFile(output);
+		}
+
         private static void WriteToFile(string message)
         {
             string date = $"{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}";
-            string filename = $"{System.IO.Directory.GetCurrentDirectory()}\\{date}_Log.txt";
+            string filename = $"{Directory.GetCurrentDirectory()}\\{date}_Log.txt";
 
             File.AppendAllText(filename, message);
         }
