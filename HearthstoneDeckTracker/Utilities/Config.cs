@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace HearthstoneDeckTracker.Utilities
 {
@@ -23,5 +18,11 @@ namespace HearthstoneDeckTracker.Utilities
         {
             return int.Parse(ConfigurationManager.AppSettings["LogFileUpdateDelay"]);
         }
-    }
+
+	    public static string LogFolder()
+	    {
+		    return ConfigurationManager.AppSettings["LogFolder"];
+	    }
+
+	}
 }

@@ -115,14 +115,10 @@ namespace HearthstoneDeckTracker.Tracker
                                     if (!sr.EndOfStream && !(next == 'D' || next == 'W'))
                                         break;
                                     var logLine = new LogEntry(Settings.Name, line);
-                                    if (Settings.StartFilters != null && (Settings.ContainingFilters != null
-                                                                          && (!Settings.HasFilters ||
-                                                                              Settings.StartFilters.Any(x =>
-                                                                                  logLine.LineContent.StartsWith(x))
-                                                                              || Settings.ContainingFilters.Any(x =>
-                                                                                  logLine.LineContent.Contains(x)) &&
-                                                                              logLine.Time >= _startingPoint)))
-                                    {
+									if ((!Settings.HasFilters || (Settings.StartFilters?.Any(x => logLine.LineContent.StartsWith(x)) ?? false)
+									     || (Settings.ContainingFilters?.Any(x => logLine.LineContent.Contains(x)) ?? false))
+									    && logLine.Time >= _startingPoint)
+									{
                                         OnLogFileFound?.Invoke($"MONITOR '{Settings.Name} - Successfully queued {logLine.LineContent}");
                                         _logs.Enqueue(logLine);
                                     }

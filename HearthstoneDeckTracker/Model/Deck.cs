@@ -17,7 +17,7 @@ namespace HearthstoneDeckTracker.Model
 		    }
 		    else
 		    {
-			    Log.Write($"Unable to add card {card.Id} to deck '{Name}'", Log.Type.Error);
+			    Log.Error($"Unable to add card {card.Id} to deck '{Name}'");
 		    }
 	    }
 

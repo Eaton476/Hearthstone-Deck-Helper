@@ -32,7 +32,7 @@ namespace HearthstoneDeckTracker.Tracker
             _watcher.Changed += OnChanged;
             _watcher.EnableRaisingEvents = true;
             Interactions = new List<Interaction>();
-            Log.Write($"Starting watching {_logFile} for changes.", Log.Type.Info);
+            Log.Info($"Starting watching {_logFile} for changes.");
         }
 
         public void StartWatching()

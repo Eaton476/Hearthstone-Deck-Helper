@@ -1,5 +1,6 @@
 ﻿using HearthstoneDeckTracker.Tracker;
 using System.Windows;
+using HearthstoneDeckTracker.Utilities;
 
 namespace HearthstoneDeckTracker
 {
@@ -17,6 +18,7 @@ namespace HearthstoneDeckTracker
             //zoneLogFileReader.WatchLogFile();
             //ListViewInteractions.ItemsSource = zoneLogFileReader.Interactions;
 
+			Log.Initialize();
 			LogFileHandler handler = new LogFileHandler();
 			handler.Start();
         }

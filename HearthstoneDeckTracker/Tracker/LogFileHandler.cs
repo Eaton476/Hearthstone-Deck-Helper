@@ -14,9 +14,9 @@ namespace HearthstoneDeckTracker.Tracker
         private readonly LogFileController _logFileController;
         private bool _stop;
 
-        private void OnLogFileFound(string msg) => Log.Write(msg, Log.Type.Info);
-        private void OnLogLineIgnored(string msg) => Log.Write(msg, Log.Type.Info);
-        private void OnLogLineError(Exception ex) => Log.Write(ex);
+        private void OnLogFileFound(string msg) => Log.Info(msg);
+        private void OnLogLineIgnored(string msg) => Log.Info(msg);
+        private void OnLogLineError(Exception ex) => Log.Error(ex);
 
         public LogFileHandler()
         {
@@ -53,7 +53,7 @@ namespace HearthstoneDeckTracker.Tracker
         {
             _stop = false;
             _logFileController.Start();
-            Log.Write("Starting monitoring Hearthstone log files", Log.Type.Info);
+            Log.Info("Starting monitoring Hearthstone log files");
         }
 
         private void HandleLine(List<LogEntry> entries)
@@ -62,7 +62,7 @@ namespace HearthstoneDeckTracker.Tracker
             {
                 if (!_stop)
                 {
-	                Log.Write(entry);
+	                Log.Info($"Handling line - {entry.LineContent}");
 
 	                switch (entry.LogFile)
 	                {
