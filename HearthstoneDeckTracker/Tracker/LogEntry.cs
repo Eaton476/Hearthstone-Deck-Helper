@@ -10,7 +10,7 @@ namespace HearthstoneDeckTracker.Tracker
 	    {
 		    LogFile = logFile;
 		    Line = line;
-		    Match match = LogTemplates.LogEntryStructure.Match(line);
+		    Match match = LogEntryRegex.LogEntryStructure.Match(line);
 		    if (match.Success)
 		    {
 			    DateTime time;

@@ -87,7 +87,7 @@
     <Compile Include="Tracker\ZoneLogFileReader.cs" />
     <Compile Include="Utilities\Config.cs" />
     <Compile Include="Utilities\Log.cs" />
-    <Compile Include="Utilities\LogTemplates.cs" />
+    <Compile Include="Utilities\LogEntryRegex.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

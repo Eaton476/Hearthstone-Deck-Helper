@@ -11,5 +11,15 @@ namespace HearthstoneDeckTracker.Model
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
 		public string Result { get; set; }
 		private int Turns { get; set; }
+
+		public void StartGame()
+		{
+			TimeGameStart = DateTime.UtcNow;
+		}
+
+		public void EndGame()
+		{
+			TimeGameFinish = DateTime.UtcNow;
+		}
 	}
 }

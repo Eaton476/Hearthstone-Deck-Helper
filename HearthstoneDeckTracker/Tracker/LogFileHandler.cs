@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers;
 using HearthstoneDeckTracker.Utilities;
 
@@ -12,6 +13,7 @@ namespace HearthstoneDeckTracker.Tracker
         private readonly LoadingScreenLogHandler _loadingScreenLogHandler = new LoadingScreenLogHandler();
         private readonly PowerLogFileHandler _powerLogFileHandler = new PowerLogFileHandler();
         private readonly LogFileController _logFileController;
+        private Game _game = new Game();
         private bool _stop;
 
         private void OnLogFileFound(string msg) => Log.Info(msg);
@@ -69,8 +71,10 @@ namespace HearthstoneDeckTracker.Tracker
 		                case "FullScreenFX":
 			                break;
 		                case "LoadingScreen":
+							_loadingScreenLogHandler.Handle(entry, ref _game);
 			                break;
 		                case "Power":
+							_powerLogFileHandler.Handle(entry, ref _game);
 			                break;
 	                }
                 }
