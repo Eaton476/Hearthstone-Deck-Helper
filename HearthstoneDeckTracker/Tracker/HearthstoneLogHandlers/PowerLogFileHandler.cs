@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
 
@@ -22,29 +16,33 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 				string value = match.Groups["value"].Value;
 
 				//finding names of players
-				if (tag == "PLAYSTATE" && value == "PLAYING")
+				if (tag == "PLAYSTATE" && value == "PLAYING" && !int.TryParse(entity, out int x))
 				{
-					if (game.User.HasName)
+					if (entity == Config.HearthstoneUsername())
 					{
-						game.Opponent.Name = entity;
-					}
+					    game.User.Name = entity;
+					    Log.Info($"Detected username is '{entity}'.");
+                    }
 					else
 					{
-						game.User.Name = entity;
-					}
+					    game.Opponent.Name = entity;
+                        Log.Info($"Detected opponent is {entity}");
+                    }
 				}
 
 				//finding who went first
-				if (tag == "FIRST__PLAYER" && !game.User.Coin && !game.Opponent.Coin)
+				if (tag == "FIRST_PLAYER" && !game.User.Coin && !game.Opponent.Coin)
 				{
 					if (entity == game.User.Name)
 					{
 						game.User.Coin = true;
-					}
+					    Log.Info("Detected user is going first (has the coin).");
+                    }
 					else
 					{
 						game.Opponent.Coin = true;
-					}
+					    Log.Info("Detected opponent is going first (has the coin).'");
+                    }
 				}
 			}
 		}

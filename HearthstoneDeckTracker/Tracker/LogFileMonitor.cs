@@ -119,17 +119,17 @@ namespace HearthstoneDeckTracker.Tracker
 									     || (Settings.ContainingFilters?.Any(x => logLine.LineContent.Contains(x)) ?? false))
 									    && logLine.Time >= _startingPoint)
 									{
-                                        OnLogFileFound?.Invoke($"MONITOR '{Settings.Name} - Successfully queued {logLine.LineContent}");
+                                        //OnLogFileFound?.Invoke($"MONITOR '{Settings.Name} - Successfully queued {logLine.LineContent}");
                                         _logs.Enqueue(logLine);
                                     }
                                     else
                                     {
-                                        OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Didn't match filters {logLine.LineContent}");
+                                        //OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Didn't match filters {logLine.LineContent}");
                                     }
                                 }
                                 else
                                 {
-                                    OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Ignored {line}'");
+                                    //OnLogLineIgnored?.Invoke($"MONITOR '{Settings.Name} - Ignored {line}'");
                                 }
                                 _offset += Encoding.UTF8.GetByteCount(line + Environment.NewLine);
                             }

@@ -24,5 +24,9 @@ namespace HearthstoneDeckTracker.Utilities
 		    return ConfigurationManager.AppSettings["LogFolder"];
 	    }
 
-	}
+        public static string HearthstoneUsername()
+        {
+            return ConfigurationManager.AppSettings["HearthstoneUsername"];
+        }
+    }
 }

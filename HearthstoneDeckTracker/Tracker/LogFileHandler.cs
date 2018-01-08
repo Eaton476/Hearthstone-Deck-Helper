@@ -64,7 +64,7 @@ namespace HearthstoneDeckTracker.Tracker
             {
                 if (!_stop)
                 {
-	                Log.Info($"Handling line - {entry.LineContent}");
+	                //Log.Info($"Handling line - {entry.LineContent}");
 
 	                switch (entry.LogFile)
 	                {

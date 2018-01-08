@@ -1,4 +1,5 @@
 ﻿using HearthstoneDeckTracker.Model;
+using HearthstoneDeckTracker.Utilities;
 
 namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 {
@@ -9,10 +10,15 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 		    if (entry.Line.Contains("Gameplay.Start()"))
 		    {
 			    game.StartGame();
+		        Log.Info("Detected that game is starting.");
 		    }
 			else if (entry.Line.Contains("Gameplay.OnDestroy()"))
 		    {
-			    game.EndGame();
+		        if (game.GameStarted)
+		        {
+		            game.EndGame();
+		            Log.Info("Detected that game has ended.");
+		        }
 		    }
 	    }
     }
