@@ -1,11 +1,28 @@
 ﻿using System;
+using HearthDb.Deckstrings;
 
 namespace HearthstoneDeckTracker.Model
 {
 	public class Game
 	{
-		public Player User { get; set; } = new Player();
-		public Player Opponent { get; set; } = new Player();
+		public Player User { get; set; } = new Player
+		{
+			Deck = new Deck(),
+			Coin = false,
+			Health = 30,
+			Id = 1,
+			Name = "",
+			Win = false
+		};
+		public Player Opponent { get; set; } = new Player
+		{
+			Deck = new Deck(),
+			Coin = false,
+			Health = 30,
+			Id = 2,
+			Name = "",
+			Win = false
+		};
 	    internal DateTime TimeGameStart { get; set; }
 		internal DateTime TimeGameFinish { get; set; }
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;

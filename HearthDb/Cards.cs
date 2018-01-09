@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Xml.Serialization;
 using HearthDb.Enums;
 
@@ -42,5 +43,24 @@ namespace HearthDb
 
 		public static Card GetFromDbfId(int dbfId, bool collectibe = true)
 			=> (collectibe ? Collectible : All).Values.FirstOrDefault(x => x.DbfId == dbfId);
+
+	    public static Card GetCardFromId(string cardId)
+	    {
+	        if (string.IsNullOrEmpty(cardId))
+	        {
+	            return null;
+	        }
+	        else
+	        {
+		        if (Cards.All.TryGetValue(cardId, out HearthDb.Card dbCard))
+		        {
+			        return new Card(dbCard.Entity);
+		        }
+		        else
+		        {
+			        return null;
+		        }
+	        }
+	    }
 	}
 }
