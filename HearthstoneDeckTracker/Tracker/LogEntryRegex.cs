@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace HearthstoneDeckTracker.Utilities
+namespace HearthstoneDeckTracker.Tracker
 {
 	public static class LogEntryRegex
 	{

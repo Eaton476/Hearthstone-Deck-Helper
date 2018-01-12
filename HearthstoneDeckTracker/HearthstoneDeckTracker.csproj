@@ -64,10 +64,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="API\API.cs" />
+    <Compile Include="Enums\PageNumber.cs" />
     <Compile Include="Enums\LogType.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Interaction.cs" />
+    <Compile Include="Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\FullScreenFXLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\LoadingScreenLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\PowerLogFileHandler.cs" />
@@ -79,8 +84,11 @@
     <Compile Include="Tracker\Screenshot.cs" />
     <Compile Include="Tracker\ZoneLogFileReader.cs" />
     <Compile Include="Utilities\Config.cs" />
+    <Compile Include="Utilities\Converters\BaseValueConverter.cs" />
+    <Compile Include="Utilities\Converters\PageValueConverter.cs" />
     <Compile Include="Utilities\Log.cs" />
-    <Compile Include="Utilities\LogEntryRegex.cs" />
+    <Compile Include="Tracker\LogEntryRegex.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -123,9 +135,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forms\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Artwork\HearthstoneBackground.jpg" />
+    <Resource Include="Images\Icons\analytics_icon.png" />
+    <Resource Include="Images\Icons\collection_icon.png" />
+    <Resource Include="Images\Icons\home_icon.png" />
+    <Resource Include="Images\Icons\settings_icon.png" />
+    <Resource Include="Images\Icons\suggestion_icon.png" />
     <Content Include="Libraries\Newtonsoft.Json.dll" />
     <Content Include="Libraries\unirest-net.dll" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace HearthstoneDeckTracker.Utilities
 {
@@ -27,6 +28,23 @@ namespace HearthstoneDeckTracker.Utilities
         public static string HearthstoneUsername()
         {
             return ConfigurationManager.AppSettings["HearthstoneUsername"];
+        }
+
+        public static bool ShowHomePage()
+        {
+            return Boolean.Parse(ConfigurationManager.AppSettings["ShowHomePage"]);
+        }
+
+        public static void ToggleShowHomePage()
+        {
+            if (ShowHomePage())
+            {
+                ConfigurationManager.AppSettings.Set("ShowHomePage", "false");
+            }
+            else
+            {
+                ConfigurationManager.AppSettings.Set("ShowHomePage", "true");
+            }
         }
     }
 }

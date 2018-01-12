@@ -4,10 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HearthstoneDeckTracker"
+        xmlns:converters="clr-namespace:HearthstoneDeckTracker.Utilities.Converters"
         mc:Ignorable="d"
-        Title="Hearthstone Assistant">
+        Title="Hearthstone Assistant" Width="800" Height="700">
     <Grid>
-        <Grid HorizontalAlignment="Left" Height="319" VerticalAlignment="Top" Width="517"/>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    Background="LightGray">
+            <Button x:Name="HomeButton"
+                    ToolTip="Home Page"
+                    Content="{StaticResource HomeIcon}"
+                    Margin="0 20 0 20"/>
+            <Button x:Name="CollectionButton"
+                    ToolTip="View your deck/card collection"
+                    Content="{StaticResource CollectionIcon}"
+                    Margin="0 0 0 20"/>
+            <Button x:Name="SuggestionButton"
+                    ToolTip="Improve your deck"
+                    Content="{StaticResource SuggestionIcon}"
+                    Margin="0 0 0 20"/>
+            <Button x:Name="AnalyticsButton"
+                    ToolTip="See your performance statistics"
+                    Content="{StaticResource AnalyticsIcon}"
+                    Margin="0 0 0 20"/>
+            <Button x:Name="SettingsButton"
+                    ToolTip="Settings"
+                    Content="{StaticResource SettingsIcon}"
+                    Margin="0 0 0 20"/>
+        </StackPanel>
+        <Frame x:Name="WindowFrame"
+               Grid.Column="1"
+               Content="{Binding CurrentPage, Converter={converters:PageValueConverter}}"/>
     </Grid>
 </Window>
+    

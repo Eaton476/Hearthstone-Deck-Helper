@@ -2,8 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HearthstoneDeckTracker"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Image x:Key="HomeIcon" Source="Images/Icons/home_icon.png"/>
+        <Image x:Key="CollectionIcon" Source="Images/Icons/collection_icon.png"/>
+        <Image x:Key="SuggestionIcon" Source="Images/Icons/suggestion_icon.png"/>
+        <Image x:Key="AnalyticsIcon" Source="Images/Icons/analytics_icon.png"/>
+        <Image x:Key="SettingsIcon" Source="Images/Icons/settings_icon.png"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
     </Application.Resources>
 </Application>
