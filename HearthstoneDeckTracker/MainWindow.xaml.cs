@@ -1,6 +1,7 @@
 ﻿using HearthstoneDeckTracker.Tracker;
 using System.Windows;
 using System.Windows.Controls;
+using HearthstoneDeckTracker.Enums;
 using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.ViewModel;
 
@@ -11,11 +12,13 @@ namespace HearthstoneDeckTracker
     /// </summary>
     public partial class MainWindow : Window
     {
+        readonly MainWindowViewModel _dataContext = new MainWindowViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            this.DataContext = new MainWindowViewModel();
+            this.DataContext = _dataContext;
 
             //API.GetAllCardData();
             //ZoneLogFileReader zoneLogFileReader = new ZoneLogFileReader(Config.HearthstoneLogDirectory(), Config.HearthstoneZoneLogFile());
@@ -25,6 +28,16 @@ namespace HearthstoneDeckTracker
 			//Log.Initialize();
 			//LogFileHandler handler = new LogFileHandler();
 			//handler.Start();
+        }
+
+        private void CollectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            _dataContext.CurrentPage = PageNumber.Collection;
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            _dataContext.CurrentPage = PageNumber.Home;
         }
     }
 }

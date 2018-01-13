@@ -17,6 +17,8 @@ namespace HearthstoneDeckTracker.Utilities.Converters
             {
                 case PageNumber.Home:
                     return new HomePage();
+                case PageNumber.Collection:
+                    return new CollectionPage();
 
                 default:
                     Debugger.Break();

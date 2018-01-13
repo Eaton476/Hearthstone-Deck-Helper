@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Drawing;
 using System.Linq;
 using HearthDb.CardDefs;
 using HearthDb.Enums;
@@ -83,5 +84,7 @@ namespace HearthDb
 		}
 
 		public string GetLocFlavorText(Locale lang) => Entity.GetLocString(FLAVORTEXT, lang);
+
+	    public Bitmap CardImage => new Bitmap(@"");
 	}
 }

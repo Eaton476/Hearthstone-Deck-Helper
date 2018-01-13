@@ -66,9 +66,13 @@
     <Compile Include="API\API.cs" />
     <Compile Include="Enums\PageNumber.cs" />
     <Compile Include="Enums\LogType.cs" />
+    <Compile Include="Model\Database.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Interaction.cs" />
+    <Compile Include="Pages\CollectionPage.xaml.cs">
+      <DependentUpon>CollectionPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -88,6 +92,7 @@
     <Compile Include="Utilities\Converters\PageValueConverter.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Tracker\LogEntryRegex.cs" />
+    <Compile Include="ViewModel\CurrentDeckListView.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +106,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\CollectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -135,6 +144,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\CardImages\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>

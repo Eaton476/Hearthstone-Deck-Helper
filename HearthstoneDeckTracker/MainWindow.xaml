@@ -17,11 +17,11 @@
             <Button x:Name="HomeButton"
                     ToolTip="Home Page"
                     Content="{StaticResource HomeIcon}"
-                    Margin="0 20 0 20"/>
+                    Margin="0 20 0 20" Click="HomeButton_Click"/>
             <Button x:Name="CollectionButton"
                     ToolTip="View your deck/card collection"
                     Content="{StaticResource CollectionIcon}"
-                    Margin="0 0 0 20"/>
+                    Margin="0 0 0 20" Click="CollectionButton_Click"/>
             <Button x:Name="SuggestionButton"
                     ToolTip="Improve your deck"
                     Content="{StaticResource SuggestionIcon}"
