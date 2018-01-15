@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using HearthDb;
 using HearthDb.Deckstrings;
+using HearthDb.Enums;
 
 namespace HearthstoneDeckTracker.Model
 {

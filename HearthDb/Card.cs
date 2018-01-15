@@ -3,6 +3,8 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Versioning;
 using HearthDb.CardDefs;
 using HearthDb.Enums;
 using static HearthDb.Enums.GameTag;
@@ -84,7 +86,5 @@ namespace HearthDb
 		}
 
 		public string GetLocFlavorText(Locale lang) => Entity.GetLocString(FLAVORTEXT, lang);
-
-	    public Bitmap CardImage => new Bitmap(@"");
 	}
 }

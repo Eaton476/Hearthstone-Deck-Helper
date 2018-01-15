@@ -92,6 +92,7 @@
     <Compile Include="Utilities\Converters\PageValueConverter.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Tracker\LogEntryRegex.cs" />
+    <Compile Include="ViewModel\CardSearch.cs" />
     <Compile Include="ViewModel\CurrentDeckListView.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -144,7 +145,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\CardImages\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>

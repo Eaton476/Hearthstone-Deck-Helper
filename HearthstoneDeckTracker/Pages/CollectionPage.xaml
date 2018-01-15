@@ -18,28 +18,51 @@
                 Margin="20"
                 CornerRadius="10"
                 Padding="10">
-            <StackPanel>
-                <TextBlock Text="Current Decks"
-                            FontWeight="Bold"
-                            FontSize="20"/>
-                <Grid Margin="0 5 0 0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0"
-                            Content="Create Deck"
-                            Margin="0 0 5 0"/>
-                    <Button Grid.Column="1"
-                            Content="Edit Deck"/>
-                    <Button Grid.Column="2"
-                            Content="Delete Deck"
-                            Margin="5 0 0 0"/>
-                </Grid>
-                <DataGrid x:Name="CurrentDecksDataGrid" 
-                          Margin="0 10 0 0"/>
-            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Current Decks"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <Grid Margin="0 5 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0"
+                                Content="Create Deck"
+                                Margin="0 0 5 0"/>
+                        <Button Grid.Column="1"
+                                Content="Edit Deck"/>
+                        <Button Grid.Column="2"
+                                Content="Delete Deck"
+                                Margin="5 0 0 0"/>
+                    </Grid>
+                    <DataGrid x:Name="CurrentDecksDataGrid" 
+                              Margin="0 10 0 0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Selected Deck"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Edit Card"
+                                Grid.Column="0"/>
+                        <Button Content="Delete Card"
+                                Grid.Column="1"/>
+                    </Grid>
+                    <DataGrid x:Name="SelectedDeckDataGrid"
+                              Margin="0 10 0 0"/>
+                </StackPanel>
+            </Grid>
         </Border>
         <Border Grid.Column="1"
                 Background="White"
@@ -47,10 +70,64 @@
                 CornerRadius="10"
                 Padding="10">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Card Search (Name)"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <Label Content="Enter query in the input field below."/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtBoxCardSearch"
+                                 Grid.Column="0"/>
+                        <Button x:Name="BtnCardSearch"
+                                Content="Search"
+                                Grid.Column="1" Click="BtnCardSearch_Click"/>
+                    </Grid>
+                    <Label x:Name="LblSearchingInformation"
+                           Content="Searching..."
+                           Visibility="Collapsed"/>
+                    <Label x:Name="LblResults"
+                           Content="Results"/>
+                    <DataGrid x:Name="DataGridSearchResults"
+                              MouseDoubleClick="DataGridSearchResults_MouseDoubleClick" 
+                              SelectionMode="Single"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Card Information"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Margin="0 10 0 0"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Content="Name:"
+                                   BorderThickness="0"/>
+                            <TextBox x:Name="TxtBoxCardName"/>
+                            <Label Content="Type:"
+                                   BorderThickness="0"/>
+                            <TextBox x:Name="TxtBoxCardType"/>
+                            <Label Content="Rarity:"
+                                   BorderThickness="0"/>
+                            <TextBox x:Name="TxtBoxCardRarity"/>
+                            <Label Content="Set:"
+                                   BorderThickness="0"/>
+                            <TextBox x:Name="TxtBoxCardSet"/>
+                        </StackPanel>
+                        <Image Grid.Column="1"
+                               x:Name="CardImage"
+                               Stretch="Uniform" Height="320"/>
+                    </Grid>
+                </StackPanel>
                 
             </Grid>
         </Border>

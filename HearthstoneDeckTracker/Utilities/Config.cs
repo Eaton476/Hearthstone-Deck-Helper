@@ -46,5 +46,10 @@ namespace HearthstoneDeckTracker.Utilities
                 ConfigurationManager.AppSettings.Set("ShowHomePage", "true");
             }
         }
+
+        public static string CardImagesFolder()
+        {
+            return ConfigurationManager.AppSettings["CardImagesFolder"];
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using HearthDb.Enums;
 
@@ -43,6 +44,24 @@ namespace HearthDb
 
 		public static Card GetFromDbfId(int dbfId, bool collectibe = true)
 			=> (collectibe ? Collectible : All).Values.FirstOrDefault(x => x.DbfId == dbfId);
+
+	    public static List<Card> SearchCardsByNameAsync(string query, Locale lang)
+	    {
+	        List<Card> cardsFound = new List<Card>();
+            foreach (Card card in Collectible.Values)
+            {
+                string cardname = card.GetLocName(lang);
+                if (cardname != null)
+                {
+                    if (cardname.ToLower().Contains(query))
+                    {
+                        cardsFound.Add(card);
+                    }
+                }
+            }
+
+	        return cardsFound;
+        }
 
 	    public static Card GetCardFromId(string cardId)
 	    {

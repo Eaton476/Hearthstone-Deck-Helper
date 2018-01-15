@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:HearthstoneDeckTracker"
         xmlns:converters="clr-namespace:HearthstoneDeckTracker.Utilities.Converters"
         mc:Ignorable="d"
-        Title="Hearthstone Assistant" Width="800" Height="700">
+        Title="Hearthstone Assistant" Width="800" Height="700"
+        WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*"/>
