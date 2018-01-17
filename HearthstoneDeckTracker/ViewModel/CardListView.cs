@@ -3,7 +3,7 @@ using HearthDb.Enums;
 
 namespace HearthstoneDeckTracker.ViewModel
 {
-    class CardSearch
+    class CardListView
     {
         public string Name { get; set; }
         public string Type { get; set; }
@@ -13,7 +13,7 @@ namespace HearthstoneDeckTracker.ViewModel
         public string Set { get; set; }
         public int Dbfid { get; set; }
 
-        public CardSearch(Card card, Locale language = Locale.enUS)
+        public CardListView(Card card, Locale language = Locale.enUS)
         {
             Name = card.GetLocName(language);
             Type = card.Type.ToString();

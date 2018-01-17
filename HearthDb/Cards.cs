@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using HearthDb.Enums;
 
@@ -63,23 +61,22 @@ namespace HearthDb
 	        return cardsFound;
         }
 
+	    public static List<Card> GetHeroClasses()
+	    {
+	        return All.Values.Where(x => x.Type == CardType.HERO && x.Entity.CardId.Contains("HERO")).ToList();
+	    }
+
 	    public static Card GetCardFromId(string cardId)
 	    {
 	        if (string.IsNullOrEmpty(cardId))
 	        {
 	            return null;
 	        }
-	        else
+	        if (All.TryGetValue(cardId, out Card dbCard))
 	        {
-		        if (Cards.All.TryGetValue(cardId, out HearthDb.Card dbCard))
-		        {
-			        return new Card(dbCard.Entity);
-		        }
-		        else
-		        {
-			        return null;
-		        }
+	            return new Card(dbCard.Entity);
 	        }
+	        return null;
 	    }
 	}
 }

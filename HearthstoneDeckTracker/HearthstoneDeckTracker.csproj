@@ -92,8 +92,9 @@
     <Compile Include="Utilities\Converters\PageValueConverter.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Tracker\LogEntryRegex.cs" />
-    <Compile Include="ViewModel\CardSearch.cs" />
-    <Compile Include="ViewModel\CurrentDeckListView.cs" />
+    <Compile Include="ViewModel\CardListView.cs" />
+    <Compile Include="ViewModel\CardListViewDeck.cs" />
+    <Compile Include="ViewModel\DeckListView.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
