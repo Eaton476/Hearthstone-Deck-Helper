@@ -16,6 +16,11 @@ namespace HearthstoneDeckTracker.Model
 
         static Database()
         {
+            //AddTestDeck();
+        }
+
+        private static void AddTestDeck()
+        {
             Deck testDeck = new Deck();
             testDeck.Name = "TESTDECK";
             testDeck.HeroDbfId = 7;
@@ -76,7 +81,35 @@ namespace HearthstoneDeckTracker.Model
             List<string> deckStrings = CurrentDecks.Select(x => DeckSerializer.Serialize(x, true)).ToList();
             string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
             File.WriteAllLines(path, deckStrings);
-            Log.Info("Successfully saved decks to file");
+            Log.Info("Successfully saved decks to file.");
+        }
+
+        public static void LoadData()
+        {
+            string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
+            List<string> lines = File.ReadAllLines(path).ToList();
+            List<string> decksToLoad = new List<string>();
+            string input = "";
+            for (int i = 0; i < lines.Count; i++)
+            {
+                input = input + lines[i] + "\n";
+                if (lines.Count == i + 1)
+                {
+                    decksToLoad.Add(input);
+                    input = "";
+                }
+                else
+                {
+                    if (lines[i + 1].StartsWith("###"))
+                    {
+                        decksToLoad.Add(input);
+                        input = "";
+                    }
+                }
+            }
+            decksToLoad.ForEach(x => CurrentDecks.Add(DeckSerializer.Deserialize(x)));
+
+            Log.Info("Successfully loaded decks from file.");
         }
     }
 }

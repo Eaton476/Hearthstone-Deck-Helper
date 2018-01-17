@@ -21,6 +21,9 @@ namespace HearthstoneDeckTracker
 
             this.DataContext = _dataContext;
 
+            Log.Initialize();
+            Database.LoadData();
+        
             //API.GetAllCardData();
             //ZoneLogFileReader zoneLogFileReader = new ZoneLogFileReader(Config.HearthstoneLogDirectory(), Config.HearthstoneZoneLogFile());
             //zoneLogFileReader.WatchLogFile();
