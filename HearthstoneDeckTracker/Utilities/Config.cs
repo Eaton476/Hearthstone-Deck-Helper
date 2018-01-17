@@ -51,5 +51,15 @@ namespace HearthstoneDeckTracker.Utilities
         {
             return ConfigurationManager.AppSettings["CardImagesFolder"];
         }
+
+        public static string SavedDataFolder()
+        {
+            return ConfigurationManager.AppSettings["SavedDataFolder"];
+        }
+
+        public static string SavedDecksFile()
+        {
+            return ConfigurationManager.AppSettings["SavedDecksFile"];
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Resources;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +17,7 @@ using HearthDb.Enums;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.ViewModel;
+using MessageBox = System.Windows.MessageBox;
 
 namespace HearthstoneDeckTracker.Pages
 {
@@ -25,14 +27,16 @@ namespace HearthstoneDeckTracker.Pages
     public partial class CollectionPage : Page
     {
         private readonly List<DeckListView> _deckListView = new List<DeckListView>();
-        private Deck _selectedDeck = null;
+        private Deck _selectedDeck;
         private Card _shownCard;
+        private bool _editDeck = false;
+        private string _deckToEdit;
 
         public CollectionPage()
         {
             InitializeComponent();
-            RefreshDecklist();
             InitialiseClasslist();
+            RefreshDecklist();
 
             DataGridCurrentDecks.AutoGenerateColumns = true;
             DataGridCurrentDecks.IsReadOnly = true;
@@ -45,9 +49,10 @@ namespace HearthstoneDeckTracker.Pages
 
         private void RefreshDecklist()
         {
+            _deckListView.Clear();
             Database.CurrentDecks.ForEach(x => _deckListView.Add(new DeckListView(x)));
-            DataGridCurrentDecks.ItemsSource = null;
             DataGridCurrentDecks.ItemsSource = _deckListView;
+            DataGridCurrentDecks.Items.Refresh();
         }
 
         private async void BtnCardSearch_Click(object sender, RoutedEventArgs e)
@@ -113,6 +118,8 @@ namespace HearthstoneDeckTracker.Pages
             {
                 PanelCreateDeck.Visibility = Visibility.Collapsed;
             }
+
+            _editDeck = false;
         }
 
         private void InitialiseClasslist()
@@ -131,7 +138,15 @@ namespace HearthstoneDeckTracker.Pages
 
             if (selectedHero != null && !string.IsNullOrWhiteSpace(deckName))
             {
-                Database.CreateNewDeck(selectedHero, deckName);
+                if (_editDeck)
+                {
+                    Database.EditDeck(_deckToEdit, deckName, selectedHero);
+                }
+                else
+                {
+                    Database.CreateNewDeck(selectedHero, deckName);
+                }
+
                 ResetDeckCreationPanel();
                 RefreshDecklist();
             }
@@ -139,7 +154,7 @@ namespace HearthstoneDeckTracker.Pages
 
         private void ResetDeckCreationPanel()
         {
-            ComboSelectClass.SelectedIndex = 1;
+            ComboSelectClass.SelectedIndex = 0;
             TxtBoxDeckName.Clear();
             PanelCreateDeck.Visibility = Visibility.Collapsed;
         }
@@ -157,6 +172,7 @@ namespace HearthstoneDeckTracker.Pages
         private void InitialiseSelectedDeck()
         {
             DataGridSelectedDeck.ItemsSource = Database.GetCardListViewDeckFromDeck(_selectedDeck);
+            DataGridSelectedDeck.Items.Refresh();
             LblSelectedDeck.Text = $"Selected Deck - {_selectedDeck.Name}";
         }
 
@@ -175,16 +191,17 @@ namespace HearthstoneDeckTracker.Pages
         {
             if (_shownCard != null && _selectedDeck != null)
             {
-                _selectedDeck.CardDbfIds.TryGetValue(_shownCard.DbfId, out int count);
+                Deck deckToEdit = Database.CurrentDecks.First(x => x.Name == _selectedDeck.Name);
+                deckToEdit.CardDbfIds.TryGetValue(_shownCard.DbfId, out int count);
                 if (count == 0)
                 {
-                    _selectedDeck.CardDbfIds.Add(_shownCard.DbfId, 1);
+                    deckToEdit.CardDbfIds.Add(_shownCard.DbfId, 1);
                 }
                 else if (count == 1)
                 {
                     if (_shownCard.Rarity != Rarity.LEGENDARY)
                     {
-                        _selectedDeck.CardDbfIds[_shownCard.DbfId] = 2;
+                        deckToEdit.CardDbfIds[_shownCard.DbfId] = 2;
                     }
                     else
                     {
@@ -204,6 +221,71 @@ namespace HearthstoneDeckTracker.Pages
 
                 RefreshDecklist();
                 InitialiseSelectedDeck();
+            }
+        }
+
+        private void BtnDeleteCard_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataGridSelectedDeck.SelectedItem is CardListViewDeck)
+            {
+                CardListViewDeck card = DataGridSelectedDeck.SelectedItem as CardListViewDeck;
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {card.Name}?", "Warning",
+                    MessageBoxButton.YesNoCancel);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Deck deckToEdit = Database.CurrentDecks.First(x => x.Name == _selectedDeck.Name);
+                    Card cardToRemove = deckToEdit.GetCards().Keys.First(x => x.Name == card.Name);
+                    deckToEdit.CardDbfIds.TryGetValue(cardToRemove.DbfId, out int quantity);
+                    if (quantity > 1)
+                    {
+                        deckToEdit.CardDbfIds[cardToRemove.DbfId] = 1;
+                    }
+                    else
+                    {
+                        deckToEdit.CardDbfIds.Remove(cardToRemove.DbfId);
+                    }
+
+                    RefreshDecklist();
+                    InitialiseSelectedDeck();
+                }
+            }
+        }
+
+        private void BtnEditDeck_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataGridCurrentDecks.SelectedItem is DeckListView)
+            {
+                if (PanelCreateDeck.Visibility == Visibility.Collapsed)
+                {
+                    DeckListView view = DataGridCurrentDecks.SelectedItem as DeckListView;
+                    Deck deckToEdit = Database.CurrentDecks.First(x => x.Name == view.Name);
+                    _deckToEdit = deckToEdit.Name;
+                    TxtBoxDeckName.Text = deckToEdit.Name;
+                    ComboSelectClass.SelectedItem = deckToEdit.GetHero();
+                    _editDeck = true;
+                    PanelCreateDeck.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ResetDeckCreationPanel();
+                }
+            }
+        }
+
+        private void BtnDeleteDeck_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataGridCurrentDecks.SelectedItem is DeckListView)
+            {
+                DeckListView view = DataGridCurrentDecks.SelectedItem as DeckListView;
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {view.Name}", "Warning",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Database.DeleteDeck(view.Name);
+                    RefreshDecklist();
+                }
             }
         }
     }

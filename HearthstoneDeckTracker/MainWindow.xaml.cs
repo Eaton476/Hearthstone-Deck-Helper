@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using HearthstoneDeckTracker.Enums;
+using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.ViewModel;
 
@@ -38,6 +39,11 @@ namespace HearthstoneDeckTracker
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             _dataContext.CurrentPage = PageNumber.Home;
+        }
+
+        private void HomeScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Database.SaveData();
         }
     }
 }

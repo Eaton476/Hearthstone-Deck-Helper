@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HearthDb;
 using HearthDb.Deckstrings;
 using HearthDb.Enums;
+using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.ViewModel;
 
 namespace HearthstoneDeckTracker.Model
@@ -17,6 +19,7 @@ namespace HearthstoneDeckTracker.Model
             Deck testDeck = new Deck();
             testDeck.Name = "TESTDECK";
             testDeck.HeroDbfId = 7;
+            testDeck.Format = FormatType.FT_STANDARD;
             testDeck.CardDbfIds.Add(2757, 2);
             testDeck.CardDbfIds.Add(2507, 2);
             testDeck.CardDbfIds.Add(1688, 2);
@@ -28,8 +31,21 @@ namespace HearthstoneDeckTracker.Model
             Deck newDeck = new Deck();
             newDeck.HeroDbfId = heroCard.DbfId;
             newDeck.Name = name;
+            newDeck.Format = FormatType.FT_STANDARD;
 
             CurrentDecks.Add(newDeck);
+        }
+
+        public static void EditDeck(string oldName, string newName, Card heroCard)
+        {
+            Deck deckToEdit = CurrentDecks.First(x => x.Name == oldName);
+            deckToEdit.Name = newName;
+            deckToEdit.HeroDbfId = heroCard.DbfId;
+        }
+
+        public static void DeleteDeck(string deckName)
+        {
+            CurrentDecks.Remove(CurrentDecks.First(x => x.Name == deckName));
         }
 
         public static Deck GetDeckFromCurrentDeckListView(DeckListView listView)
@@ -53,6 +69,14 @@ namespace HearthstoneDeckTracker.Model
             }
 
             return ret;
+        }
+
+        public static void SaveData()
+        {
+            List<string> deckStrings = CurrentDecks.Select(x => DeckSerializer.Serialize(x, true)).ToList();
+            string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
+            File.WriteAllLines(path, deckStrings);
+            Log.Info("Successfully saved decks to file");
         }
     }
 }
