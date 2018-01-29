@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HearthDb.Deckstrings;
 
 namespace HearthstoneDeckTracker.Model
@@ -10,7 +11,7 @@ namespace HearthstoneDeckTracker.Model
 			Deck = new Deck(),
 			Coin = false,
 			Health = 30,
-			Id = 1,
+			Id = 2,
 			Name = "",
 			Win = false
 		};
@@ -19,7 +20,7 @@ namespace HearthstoneDeckTracker.Model
 			Deck = new Deck(),
 			Coin = false,
 			Health = 30,
-			Id = 2,
+			Id = 1,
 			Name = "",
 			Win = false
 		};
@@ -29,6 +30,7 @@ namespace HearthstoneDeckTracker.Model
 		public string Result { get; set; }
 		private int Turns { get; set; }
 	    public bool GameStarted { get; set; } = false;
+		public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
 
 		public void StartGame()
 		{

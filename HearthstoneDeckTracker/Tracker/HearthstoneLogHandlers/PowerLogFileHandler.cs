@@ -1,12 +1,18 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using HearthDb;
+using HearthDb.CardDefs;
+using HearthDb.Enums;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
+using HearthstoneDeckTracker.Utilities.Converters;
 
 namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 {
 	public class PowerLogFileHandler
 	{
+        List<Entity> _tempEntities = new List<Entity>();
+
 		public void Handle(LogEntry entry, ref Game game)
 		{
 			//Log.Debug($"Power is currently handling {entry.Line}");
@@ -38,13 +44,15 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 				{
 					if (entity == game.User.Name)
 					{
-						game.User.Coin = true;
-					    Log.Info("Detected user has the coin");
+						game.User.Coin = false;
+					    game.Opponent.Coin = true;
+					    Log.Info("Detected opponent has the coin");
                     }
 					else
 					{
-						game.Opponent.Coin = true;
-					    Log.Info("Detected opponent has the coin'");
+						game.Opponent.Coin = false;
+					    game.User.Coin = true;
+					    Log.Info("Detected user has the coin'");
                     }
 				}
 			}
@@ -73,6 +81,20 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 						}
 				    }
 			    }
+			}
+            else if (LogEntryRegex.CreationRegex.IsMatch(entry.Line))
+			{
+			    Match match = LogEntryRegex.CreationRegex.Match(entry.Line);
+			    int id = int.Parse(match.Groups["id"].Value);
+			    string cardId = match.Groups["cardId"].Value;
+			    var zone = GameTagConverter.ParseEnum<Zone>(match.Groups["zone"].Value);
+				if (!Database.Game.Entities.ContainsKey(id))
+				{
+					if (string.IsNullOrWhiteSpace(cardId) && zone != Zone.SETASIDE)
+					{
+						
+					}
+				}
 			}
 		}
 	}

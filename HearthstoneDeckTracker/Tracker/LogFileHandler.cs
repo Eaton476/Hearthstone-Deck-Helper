@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers;
 using HearthstoneDeckTracker.Utilities;
@@ -13,8 +15,8 @@ namespace HearthstoneDeckTracker.Tracker
         private readonly LoadingScreenLogHandler _loadingScreenLogHandler = new LoadingScreenLogHandler();
         private readonly PowerLogFileHandler _powerLogFileHandler = new PowerLogFileHandler();
         private readonly LogFileController _logFileController;
-        private Game _game = new Game();
         private bool _stop;
+        private bool _running = false;
 
         private void OnLogFileFound(string msg) => Log.Info(msg);
         private void OnLogLineIgnored(string msg) => Log.Info(msg);
@@ -54,8 +56,28 @@ namespace HearthstoneDeckTracker.Tracker
         public void Start()
         {
             _stop = false;
+            _running = true;
             _logFileController.Start();
             Log.Info("Starting monitoring Hearthstone log files");
+        }
+
+        public async void StopAsync()
+        {
+            bool result = false;
+
+            if (!_stop)
+            {
+                Task<bool> promise = _logFileController.Stop();
+                _stop = await promise;
+                if (!_stop)
+                {
+                    Log.Error("Unable to stop monitoring");
+                }
+                else
+                {
+                    _running = false;
+                }
+            }
         }
 
         private void HandleLine(List<LogEntry> entries)
@@ -79,6 +101,10 @@ namespace HearthstoneDeckTracker.Tracker
 	                }
                 }
             }   
+        }
+        public bool GetRunning()
+        {
+            return _running;
         }
     }
 }

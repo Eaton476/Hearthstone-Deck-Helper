@@ -12,6 +12,10 @@
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
         <StackPanel Grid.Column="0"
                     Background="LightGray">
             <Button x:Name="HomeButton"
@@ -37,7 +41,15 @@
         </StackPanel>
         <Frame x:Name="WindowFrame"
                Grid.Column="1"
+               Grid.Row="0"
                Content="{Binding CurrentPage, Converter={converters:PageValueConverter}}"/>
+        <StatusBar Grid.Row="1"
+                   Grid.Column="1">
+            <Label x:Name="lblMonitoringStatus"
+                   Content="Not Recording Results"/>
+            <Button x:Name="btnToggleMonitoring"
+                    Content="Toggle Monitoring" Click="btnToggleMonitoring_Click"/>
+        </StatusBar>
     </Grid>
 </Window>
     

@@ -81,6 +81,7 @@
     <Compile Include="Tracker\HearthstoneLogHandlers\FullScreenFXLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\LoadingScreenLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\PowerLogFileHandler.cs" />
+    <Compile Include="Tracker\HearthstoneLogHandlers\TagChangeHandler.cs" />
     <Compile Include="Tracker\LogEntry.cs" />
     <Compile Include="Tracker\LogFileController.cs" />
     <Compile Include="Tracker\LogFileHandler.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Tracker\ZoneLogFileReader.cs" />
     <Compile Include="Utilities\Config.cs" />
     <Compile Include="Utilities\Converters\BaseValueConverter.cs" />
+    <Compile Include="Utilities\Converters\GameTagConverter.cs" />
     <Compile Include="Utilities\Converters\PageValueConverter.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Tracker\LogEntryRegex.cs" />

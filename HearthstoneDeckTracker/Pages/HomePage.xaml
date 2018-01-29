@@ -40,8 +40,6 @@
                            FontSize="14"
                            TextAlignment="Center"
                            Margin="0 20 0 0"/>
-                <CheckBox Content="Don't show me this message again."
-                          Margin="10 100 0 0"/>
             </StackPanel>
         </Border>
         

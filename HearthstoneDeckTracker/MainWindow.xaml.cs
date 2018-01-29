@@ -1,4 +1,5 @@
-﻿using HearthstoneDeckTracker.Tracker;
+﻿using System.Threading.Tasks;
+using HearthstoneDeckTracker.Tracker;
 using System.Windows;
 using System.Windows.Controls;
 using HearthstoneDeckTracker.Enums;
@@ -14,6 +15,7 @@ namespace HearthstoneDeckTracker
     public partial class MainWindow : Window
     {
         readonly MainWindowViewModel _dataContext = new MainWindowViewModel();
+        private LogFileHandler _fileHandler = new LogFileHandler();
 
         public MainWindow()
         {
@@ -23,15 +25,8 @@ namespace HearthstoneDeckTracker
 
             Log.Initialize();
             Database.LoadData();
-        
-            //API.GetAllCardData();
-            //ZoneLogFileReader zoneLogFileReader = new ZoneLogFileReader(Config.HearthstoneLogDirectory(), Config.HearthstoneZoneLogFile());
-            //zoneLogFileReader.WatchLogFile();
-            //ListViewInteractions.ItemsSource = zoneLogFileReader.Interactions;
 
-			//Log.Initialize();
-			//LogFileHandler handler = new LogFileHandler();
-			//handler.Start();
+			
         }
 
         private void CollectionButton_Click(object sender, RoutedEventArgs e)
@@ -47,6 +42,20 @@ namespace HearthstoneDeckTracker
         private void HomeScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Database.SaveData();
+        }
+
+        private void btnToggleMonitoring_Click(object sender, RoutedEventArgs e)
+        {
+            if (_fileHandler.GetRunning())
+            {
+                _fileHandler.StopAsync();
+                lblMonitoringStatus.Content = "Not Monitoring Gameplay.";
+            }
+            else
+            {
+                _fileHandler.Start();
+                lblMonitoringStatus.Content = "Monitoring Gameplay.";
+            }
         }
     }
 }

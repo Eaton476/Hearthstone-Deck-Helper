@@ -69,6 +69,8 @@ namespace HearthstoneDeckTracker.Tracker
                     newLines.Clear();
 		            await Task.Delay(Config.LogFileUpdateDelay());
 		        }
+
+	            _running = false;
 	        }
 	    }
 
@@ -82,6 +84,7 @@ namespace HearthstoneDeckTracker.Tracker
 					await Task.Delay(50);
 				}
 				await Task.WhenAll(_logFileMonitors.Where(x => force || x.Settings.Reset).Select(x => x.Stop()));
+                Log.Info("Stopped monitoring Hearthstone log files.");
 				return true;
 			}
 

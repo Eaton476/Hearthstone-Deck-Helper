@@ -13,6 +13,7 @@ namespace HearthstoneDeckTracker.Model
     public static class Database
     {
         public static List<Deck> CurrentDecks { get; set; } = new List<Deck>();
+        public static Game Game { get; set; } = new Game();
 
         static Database()
         {
