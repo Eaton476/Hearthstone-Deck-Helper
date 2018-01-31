@@ -77,11 +77,13 @@
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\FullScreenFXLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\LoadingScreenLogHandler.cs" />
     <Compile Include="Tracker\HearthstoneLogHandlers\PowerLogFileHandler.cs" />
-    <Compile Include="Tracker\HearthstoneLogHandlers\TagChangeHandler.cs" />
     <Compile Include="Tracker\LogEntry.cs" />
     <Compile Include="Tracker\LogFileController.cs" />
     <Compile Include="Tracker\LogFileHandler.cs" />
@@ -116,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

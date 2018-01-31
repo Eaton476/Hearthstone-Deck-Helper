@@ -12,6 +12,9 @@ namespace HearthDb.CardDefs
 {
 	public class Entity
 	{
+		public string Name { get; set; }
+		
+        public int EntityId { get; set; }
 		[XmlAttribute("CardID")]
 		public string CardId { get; set; }
 
@@ -85,6 +88,17 @@ namespace HearthDb.CardDefs
 				default:
 					return null;
 			}
+		}
+
+		public override string ToString()
+		{
+			string ret = $"ID:{EntityId}, NAME:{Name}, TAGS:";
+			foreach (var tag in Tags)
+			{
+				ret = ret + $"\n-TAGID:{tag.EnumId}, VALUE:{tag.Value}";
+			}
+
+			return ret;
 		}
 	}
 }

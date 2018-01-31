@@ -1,47 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
 
 namespace HearthstoneDeckTracker.Model
 {
 	public class Game
 	{
-		public Player User { get; set; } = new Player
-		{
-			Deck = new Deck(),
-			Coin = false,
-			Health = 30,
-			Id = 2,
-			Name = "",
-			Win = false
-		};
-		public Player Opponent { get; set; } = new Player
-		{
-			Deck = new Deck(),
-			Coin = false,
-			Health = 30,
-			Id = 1,
-			Name = "",
-			Win = false
-		};
+		public Player User { get; set; }
+		public Player Opponent { get; set; }
 	    internal DateTime TimeGameStart { get; set; }
 		internal DateTime TimeGameFinish { get; set; }
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
 		public string Result { get; set; }
 		private int Turns { get; set; }
-	    public bool GameStarted { get; set; } = false;
+	    public bool GameInProgress { get; set; }
 		public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
+        public int CurrentEntityId { get; set; }
 
 		public void StartGame()
 		{
 			TimeGameStart = DateTime.UtcNow;
-		    GameStarted = true;
+		    GameInProgress = true;
 		}
 
 		public void EndGame()
 		{
 			TimeGameFinish = DateTime.UtcNow;
-		    GameStarted = false;
+		    GameInProgress = false;
 		}
 	}
 }

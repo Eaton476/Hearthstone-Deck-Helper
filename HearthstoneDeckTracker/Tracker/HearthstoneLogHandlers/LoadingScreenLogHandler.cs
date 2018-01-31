@@ -5,18 +5,18 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 {
 	public class LoadingScreenLogHandler
 	{
-	    public void Handle(LogEntry entry, ref Game game)
+	    public void Handle(LogEntry entry)
 	    {
 		    if (entry.Line.Contains("Gameplay.Start()"))
 		    {
-			    game.StartGame();
+			    Database.CurrentGame.StartGame();
 		        Log.Info("Detected that game is starting.");
 		    }
 			else if (entry.Line.Contains("Gameplay.OnDestroy()"))
 		    {
-		        if (game.GameStarted)
+		        if (Database.CurrentGame.GameInProgress)
 		        {
-		            game.EndGame();
+			        Database.CurrentGame.EndGame();
 		            Log.Info("Detected that game has ended.");
 		        }
 		    }

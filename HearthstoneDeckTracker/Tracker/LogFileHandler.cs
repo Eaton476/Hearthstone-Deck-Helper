@@ -93,10 +93,10 @@ namespace HearthstoneDeckTracker.Tracker
 		                case "FullScreenFX":
 			                break;
 		                case "LoadingScreen":
-							_loadingScreenLogHandler.Handle(entry, ref _game);
+							_loadingScreenLogHandler.Handle(entry);
 			                break;
 		                case "Power":
-							_powerLogFileHandler.Handle(entry, ref _game);
+							_powerLogFileHandler.Handle(entry);
 			                break;
 	                }
                 }
