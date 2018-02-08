@@ -37,7 +37,7 @@
             <Button x:Name="SettingsButton"
                     ToolTip="Settings"
                     Content="{StaticResource SettingsIcon}"
-                    Margin="0 0 0 20"/>
+                    Margin="0 0 0 20" Click="SettingsButton_Click"/>
         </StackPanel>
         <Frame x:Name="WindowFrame"
                Grid.Column="1"

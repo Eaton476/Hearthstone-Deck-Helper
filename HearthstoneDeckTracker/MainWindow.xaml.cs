@@ -57,5 +57,10 @@ namespace HearthstoneDeckTracker
                 lblMonitoringStatus.Content = "Monitoring Gameplay.";
             }
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            _dataContext.CurrentPage = PageNumber.Settings;
+        }
     }
 }

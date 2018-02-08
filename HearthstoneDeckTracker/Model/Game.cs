@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
+using HearthstoneDeckTracker.Utilities;
 
 namespace HearthstoneDeckTracker.Model
 {
 	public class Game
 	{
-		public Player User { get; set; }
-		public Player Opponent { get; set; }
+		public Player User { get; set; } = new Player();
+		public Player Opponent { get; set; } = new Player();
 	    internal DateTime TimeGameStart { get; set; }
 		internal DateTime TimeGameFinish { get; set; }
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
@@ -28,6 +29,19 @@ namespace HearthstoneDeckTracker.Model
 		{
 			TimeGameFinish = DateTime.UtcNow;
 		    GameInProgress = false;
+		}
+
+	    public void OutputEntitiesToLog()
+	    {
+	        foreach (var entity in Entities)
+	        {
+	            Log.Debug(entity.ToString());
+	        }
+	    }
+
+		public void SaveGame()
+		{
+			
 		}
 	}
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using HearthstoneDeckTracker.Model;
 
 namespace HearthstoneDeckTracker.Pages
 {
@@ -24,5 +25,10 @@ namespace HearthstoneDeckTracker.Pages
 		{
 			InitializeComponent();
 		}
-	}
+
+        private void BtnOutputEntities_Click(object sender, RoutedEventArgs e)
+        {
+            Database.CurrentGame.OutputEntitiesToLog();
+        }
+    }
 }

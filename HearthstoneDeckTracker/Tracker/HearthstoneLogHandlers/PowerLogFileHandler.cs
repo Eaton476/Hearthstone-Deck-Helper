@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -46,12 +47,15 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 			    int value = GameTagConverter.ParseTag(tag, match.Groups["value"].Value);
 				if (entityValue.StartsWith("[") && LogEntryRegex.EntityRegex.IsMatch(entityValue)) //Find the ID in the nested entity.
 		        {
-		            Match nestedEntity = LogEntryRegex.EntityRegex.Match(entityValue);
+					//[entityName=UNKNOWN ENTITY [cardType=INVALID] id=30 zone=DECK zonePos=0 cardId= player=1]
+					Match nestedEntity = LogEntryRegex.EntityRegex.Match(entityValue);
 		            int entityId = int.Parse(nestedEntity.Groups["id"].Value);
+
 			        if (!CheckIfEntityExists(entityId))
 			        {
 				        CreateEntity(entityId);
 			        }
+
 		            UpdateEntity(entityId, tag, value);
 		        }
 				else if (int.TryParse(entityValue, out int entityId)) //Try and find the ID.
@@ -176,11 +180,33 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 		    {
 			    Match match = LogEntryRegex.CreationTagRegex.Match(entry.Line);
 			    GameTag tag = GameTagConverter.ParseEnum<GameTag>(match.Groups["tag"].Value);
-			    int value = int.Parse(match.Groups["value"].Value);
+		        int value = GameTagConverter.ParseTag(tag, match.Groups["value"].Value);
 
-				UpdateEntity(Database.CurrentGame.CurrentEntityId, tag, value);
+                //D 12:05:41.2181993 GameState.DebugPrintPower() -         tag=CARDTYPE value=GAME
+
+                UpdateEntity(Database.CurrentGame.CurrentEntityId, tag, value);
 		    }
 		}
+
+	    private void UpdateEntityDetails(int entityId, string name, string cardId)
+	    {
+	        Entity entity = GetEntity(entityId);
+	        if (entity != null)
+	        {
+	            entity.Name = name;
+	            entity.CardId = cardId;
+	        }
+	    }
+
+	    private Entity GetEntity(int id)
+	    {
+	        if (CheckIfEntityExists(id))
+	        {
+	            return Database.CurrentGame.Entities.FirstOrDefault(x => x.Key == id).Value;
+	        }
+
+	        return null;
+	    }
 
 		private bool CheckIfEntityExists(int id)
 		{
@@ -196,6 +222,12 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 		{
 			Database.CurrentGame.Entities.Add(entityId, new Entity { Name = name, EntityId = entityId });
 			Log.Info($"Created entity ID:{entityId}, NAME:{name}");
+		}
+
+		private void CreateCardEntity(int entityId, string cardId)
+		{
+			Database.CurrentGame.Entities.Add(entityId, new Entity { CardId = cardId, EntityId = entityId });
+			Log.Info($"Created entity ID:{entityId}, CARDID:{cardId}");
 		}
 
 		private Entity CreateTempEntity(string name)

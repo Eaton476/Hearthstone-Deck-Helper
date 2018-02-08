@@ -1,9 +1,11 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using HearthDb.Enums;
+using HearthDb.Utilities;
 using static HearthDb.Enums.Locale;
 
 #endregion
@@ -92,10 +94,11 @@ namespace HearthDb.CardDefs
 
 		public override string ToString()
 		{
-			string ret = $"ID:{EntityId}, NAME:{Name}, TAGS:";
+			string cardName = !string.IsNullOrEmpty(CardId) ? Cards.GetCardFromId(CardId).Name : "";
+			string ret = $"ID:{EntityId}, NAME:{Name}, CARDNAME:{cardName} TAGS:";
 			foreach (var tag in Tags)
-			{
-				ret = ret + $"\n-TAGID:{tag.EnumId}, VALUE:{tag.Value}";
+            { 
+				ret = ret + $"\n-TAGID:{Enum.GetName(typeof(GameTag), tag.EnumId)}, VALUE:{tag.Value}";
 			}
 
 			return ret;

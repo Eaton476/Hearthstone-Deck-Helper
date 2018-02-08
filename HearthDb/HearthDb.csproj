@@ -79,6 +79,7 @@
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\TagConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CardDefs.xml" />

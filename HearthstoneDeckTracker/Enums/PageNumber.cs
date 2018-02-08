@@ -3,6 +3,7 @@
     public enum PageNumber
     {
         Home = 0,
-        Collection = 1
+        Collection = 1,
+        Settings = 2
     }
 }
