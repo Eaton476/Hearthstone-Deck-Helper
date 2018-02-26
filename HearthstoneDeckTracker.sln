@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HearthstoneDeckTracker", "HearthstoneDeckTracker\HearthstoneDeckTracker.csproj", "{0187E201-3991-48A5-9ECB-89CE7EAE2B19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HearthDb", "HearthDb\HearthDb.csproj", "{7ED14243-E02B-4B94-AF00-A67A62C282F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{76983688-2F2C-48CF-82FB-2ED51509C148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +33,19 @@ Global
 		{7ED14243-E02B-4B94-AF00-A67A62C282F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7ED14243-E02B-4B94-AF00-A67A62C282F0}.Release|x86.ActiveCfg = Release|x86
 		{7ED14243-E02B-4B94-AF00-A67A62C282F0}.Release|x86.Build.0 = Release|x86
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Debug|x86.Build.0 = Debug|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Release|x86.ActiveCfg = Release|Any CPU
+		{76983688-2F2C-48CF-82FB-2ED51509C148}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CCEE2F5-269F-448B-90F7-38CC6EE35FCA}
 	EndGlobalSection
 EndGlobal

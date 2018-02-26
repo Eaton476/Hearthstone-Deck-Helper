@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,7 +19,6 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 
 		public void Handle(LogEntry entry)
 		{
-			//Log.Debug($"Power is currently handling {entry.Line}");
 		    if (LogEntryRegex.GameEntityRegex.IsMatch(entry.Line))
 		    {
 		        Match match = LogEntryRegex.GameEntityRegex.Match(entry.Line);
@@ -57,15 +57,16 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 			        }
 
 		            UpdateEntity(entityId, tag, value);
-		        }
+                }
 				else if (int.TryParse(entityValue, out int entityId)) //Try and find the ID.
 				{
 					if (!CheckIfEntityExists(entityId))
 					{
 						CreateEntity(entityId);
 					}
+
 					UpdateEntity(entityId, tag, value);
-				}
+                }
 				else //This is if we dont have the ID of the entity.
 				{
 					Entity entity = Database.CurrentGame.Entities.FirstOrDefault(x => x.Value.Name == entityValue).Value;
@@ -130,20 +131,25 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 					else
 					{
 						UpdateEntity(entity.EntityId, tag, value);
-					}
+                    }
 				}
 		    }
-			else if (LogEntryRegex.CreationRegex.IsMatch(entry.Line))
+			else if (LogEntryRegex.CreationRegexUpdating.IsMatch(entry.Line))
 		    {
-			    Match match = LogEntryRegex.CreationRegex.Match(entry.Line);
-			    int id = int.Parse(match.Groups["id"].Value);
-			    string cardId = match.Groups["cardId"].Value;
+			    Match match = LogEntryRegex.CreationRegexUpdating.Match(entry.Line);
+			    int id = int.Parse(match.Groups[2].Value);
+			    string cardId = match.Groups[5].Value;
 			    Zone zone = GameTagConverter.ParseEnum<Zone>(match.Groups["zone"].Value);
 
-		        if (!CheckIfEntityExists(id))
-		        {
-			        Database.CurrentGame.Entities.Add(id, new Entity{EntityId = id, CardId = cardId});
-		        }
+			    if (!CheckIfEntityExists(id))
+			    {
+				    Database.CurrentGame.Entities.Add(id, new Entity {EntityId = id, CardId = cardId});
+			    }
+			    else
+			    {
+				    Database.CurrentGame.Entities[id].CardId = cardId;
+			    }
+
 			    Database.CurrentGame.CurrentEntityId = id;
 		    }
 			else if (LogEntryRegex.UpdatingEntityRegex.IsMatch(entry.Line))
@@ -163,6 +169,7 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 			    {
 				    entityId = -1;
 			    }
+
 			    if (entityId != -1)
 			    {
 				    if (!CheckIfEntityExists(entityId))
@@ -173,6 +180,7 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 				    {
 					    Database.CurrentGame.Entities[entityId].CardId = cardId;
 				    }
+
 				    Database.CurrentGame.CurrentEntityId = entityId;
 			    }
 		    }
@@ -185,6 +193,20 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
                 //D 12:05:41.2181993 GameState.DebugPrintPower() -         tag=CARDTYPE value=GAME
 
                 UpdateEntity(Database.CurrentGame.CurrentEntityId, tag, value);
+		        TagChangeActions.TagChange(Database.CurrentGame.CurrentEntityId, tag, value);
+            }
+            else if (LogEntryRegex.CreationRegexCreating.IsMatch(entry.Line))
+		    {
+		        Match match = LogEntryRegex.CreationRegexCreating.Match(entry.Line);
+		        int id = int.Parse(match.Groups[1].Value);
+		        string cardId = match.Groups[2].Value;
+
+		        if (!CheckIfEntityExists(id))
+		        {
+		            CreateCardEntity(id, cardId);
+		        }
+
+		        Database.CurrentGame.CurrentEntityId = id;
 		    }
 		}
 

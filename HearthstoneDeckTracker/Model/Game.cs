@@ -14,7 +14,6 @@ namespace HearthstoneDeckTracker.Model
 		internal DateTime TimeGameFinish { get; set; }
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
 		public string Result { get; set; }
-		private int Turns { get; set; }
 	    public bool GameInProgress { get; set; }
 		public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
         public int CurrentEntityId { get; set; }
