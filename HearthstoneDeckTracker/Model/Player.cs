@@ -14,5 +14,12 @@ namespace HearthstoneDeckTracker.Model
 		public int Health { get; set; }
 		public Deck Deck { get; set; }
 		public bool HasName => Name == null;
+
+	    public Player()
+	    {
+	        Deck = new Deck();
+	        Health = 30;
+	        Win = false;
+	    }
 	}
 }

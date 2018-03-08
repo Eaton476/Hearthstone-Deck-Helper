@@ -56,7 +56,7 @@ namespace HearthstoneDeckTracker.Tracker
                             }
                             catch (Exception ex)
                             {
-                                Log.Write(ex.StackTrace);
+                                Log.Error(ex);
                             }
                             finally
                             {

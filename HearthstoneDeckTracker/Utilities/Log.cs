@@ -90,7 +90,7 @@ namespace HearthstoneDeckTracker.Utilities
 		    }
 		}
 
-	    private static void Write(string line)
+	    public static void Write(string line)
 	    {
 			line = $"{DateTime.Now.ToLongTimeString()}|{line}";
 		    if (Initialized)
