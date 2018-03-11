@@ -30,5 +30,15 @@ namespace HearthstoneDeckTracker.Pages
         {
             Database.CurrentGame.OutputEntitiesToLog();
         }
+
+        private void BtnLoadEntities_Click(object sender, RoutedEventArgs e)
+        {
+            Database.CurrentGame.LoadTestEntitiesFromXml();
+        }
+
+        private void BtnSaveEntities_Click(object sender, RoutedEventArgs e)
+        {
+            Database.CurrentGame.SaveTestEntitiesToXml();
+        }
     }
 }

@@ -50,11 +50,16 @@
   <ItemGroup>
     <Compile Include="PowerLogHandlerTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EntityTesting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HearthDb\HearthDb.csproj">
+      <Project>{7ED14243-E02B-4B94-AF00-A67A62C282F0}</Project>
+      <Name>HearthDb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HearthstoneDeckTracker\HearthstoneDeckTracker.csproj">
       <Project>{0187E201-3991-48A5-9ECB-89CE7EAE2B19}</Project>
       <Name>HearthstoneDeckTracker</Name>

@@ -22,6 +22,16 @@
                         Width="200"
                         Margin="0 10 0 0"
                         HorizontalAlignment="Left" Click="BtnOutputEntities_Click"/>
+                <Button x:Name="BtnLoadEntities" 
+                        Content="Load Test Entities From Disk"
+                        Width="200"
+                        Margin="0 10 0 0"
+                        HorizontalAlignment="Left" Click="BtnLoadEntities_Click"/>
+                <Button x:Name="BtnSaveEntities" 
+                        Content="Save Test Entities To Disk"
+                        Width="200"
+                        Margin="0 10 0 0"
+                        HorizontalAlignment="Left" Click="BtnSaveEntities_Click"/>
             </StackPanel>
         </Border>
     </Grid>

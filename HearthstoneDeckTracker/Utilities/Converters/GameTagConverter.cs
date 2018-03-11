@@ -3,7 +3,7 @@ using HearthDb.Enums;
 
 namespace HearthstoneDeckTracker.Utilities.Converters
 {
-	class GameTagConverter
+	public class GameTagConverter
 	{
 		public static int ParseTag(GameTag tag, string rawValue)
 		{

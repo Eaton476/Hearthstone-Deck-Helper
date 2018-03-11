@@ -61,5 +61,10 @@ namespace HearthstoneDeckTracker.Utilities
         {
             return ConfigurationManager.AppSettings["SavedDecksFile"];
         }
+
+        public static string EntityXmlFile()
+        {
+            return ConfigurationManager.AppSettings["EntityXMLFile"];
+        }
     }
 }

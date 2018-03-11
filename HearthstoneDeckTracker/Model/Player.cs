@@ -10,16 +10,15 @@ namespace HearthstoneDeckTracker.Model
         public int HeroEntityId { get; set; }
 		public string Name { get; set; }
 		public bool Coin { get; set; } = false;
-		public bool Win { get; set; }
-		public int Health { get; set; }
+		public string Result { get; set; }
 		public Deck Deck { get; set; }
-		public bool HasName => Name == null;
+		public int ManaUsedThisGame { get; set; }
+        public int MinionsDiedThisGame { get; set; }
+        public int NumberOfHeroPowerUsesThisGame { get; set; }
 
 	    public Player()
 	    {
 	        Deck = new Deck();
-	        Health = 30;
-	        Win = false;
 	    }
 	}
 }
