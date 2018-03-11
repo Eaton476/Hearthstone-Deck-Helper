@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Documents;
 using System.Xml.Serialization;
+using HearthDb;
 using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
 using HearthDb.Enums;
@@ -19,7 +20,6 @@ namespace HearthstoneDeckTracker.Model
 	    internal DateTime TimeGameStart { get; set; }
 		internal DateTime TimeGameFinish { get; set; }
 		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
-		public string Result { get; set; }
 	    public bool GameInProgress { get; set; }
 		public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
         public int CurrentEntityId { get; set; }
@@ -99,15 +99,26 @@ namespace HearthstoneDeckTracker.Model
 
 	        foreach (var entity in Entities.Values)
 	        {
-	            if (entity.Name == "GameEntity")
+	            if (string.IsNullOrEmpty(entity.Name))
+	            {
+	                ProcessCardEntity(entity);
+	            }
+	            else if (entity.Name == "GameEntity")
 	            {
 	                ProcessGameEntity(entity);
 	            }
-                else if (entity.Name != "" && entity.Name != "EatonGaming")
+                else if (entity.Name != null && entity.Name != "EatonGaming")
 	            {
                     ProcessOpponentEntity(entity);
 	            }
+                else if (entity.Name == "EatonGaming")
+	            {
+	                ProcessUserEntity(entity);
+	            }
 	        }
+
+            Entities.Clear();
+	        CurrentEntityId = 0;
 	    }
 
 	    private void ProcessGameEntity(Entity entity)
@@ -152,9 +163,79 @@ namespace HearthstoneDeckTracker.Model
 	                    break;
                     case GameTag.FIRST_PLAYER:
                         Opponent.Coin = false;
+                        User.Coin = true;
                         break;
 	            }
 	        }
         }
+
+	    private void ProcessUserEntity(Entity entity)
+	    {
+	        User.EntityId = entity.EntityId;
+	        User.Name = entity.Name;
+
+	        foreach (var tag in entity.Tags)
+	        {
+	            GameTag gameTag = GameTagConverter.ParseEnum<GameTag>(tag.EnumId.ToString());
+
+	            switch (gameTag)
+	            {
+	                case GameTag.PLAYSTATE:
+	                    string value = Enum.GetName(typeof(PlayState), tag.Value);
+	                    User.Result = value;
+	                    break;
+	                case GameTag.NUM_RESOURCES_SPENT_THIS_GAME:
+	                    int mana = tag.Value;
+	                    User.ManaUsedThisGame = mana;
+	                    break;
+	                case GameTag.NUM_FRIENDLY_MINIONS_THAT_DIED_THIS_GAME:
+	                    int died = tag.Value;
+	                    User.MinionsDiedThisGame = died;
+	                    break;
+	                case GameTag.NUM_TIMES_HERO_POWER_USED_THIS_GAME:
+	                    int hero = tag.Value;
+	                    User.NumberOfHeroPowerUsesThisGame = hero;
+	                    break;
+	                case GameTag.FIRST_PLAYER:
+	                    User.Coin = false;
+	                    Opponent.Coin = true;
+	                    break;
+	            }
+	        }
+        }
+
+	    private void ProcessCardEntity(Entity entity)
+	    {
+	        Card card = Cards.GetCardFromId(entity.CardId);
+	        int cardType = entity.GetTag(GameTag.CARDTYPE);
+	        int controller = entity.GetTag(GameTag.CONTROLLER);
+
+	        if (controller == 1)
+	        {
+                //Hero
+	            if (cardType == 3)
+	            {
+	                Opponent.Deck.HeroDbfId = card.DbfId;
+	                Opponent.Deck.CardsInDeck.Add(card);
+                }
+                else if (cardType != 10)
+	            {
+	                Opponent.Deck.CardsInDeck.Add(card);
+	            }
+	        }
+            else if (controller == 2)
+	        {
+	            //Hero
+	            if (cardType == 3)
+	            {
+	                User.Deck.HeroDbfId = card.DbfId;
+	                User.Deck.CardsInDeck.Add(card);
+	            }
+	            else if (cardType != 10)
+	            {
+	                User.Deck.CardsInDeck.Add(card);
+	            }
+            }
+	    }
 	}
 }

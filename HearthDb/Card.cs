@@ -15,12 +15,12 @@ namespace HearthDb
 {
 	public class Card
 	{
-		internal Card(Entity entity)
+		public Card(Entity entity)
 		{
 			Entity = entity;
 		}
 
-		public Entity Entity { get; }
+		public Entity Entity { get; set; }
 
 		public string Id => Entity.CardId;
 

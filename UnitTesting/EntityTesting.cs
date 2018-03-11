@@ -35,5 +35,12 @@ namespace UnitTesting
                 }
             }
         }
+
+        [TestMethod]
+        public void ProcessingEntities_EntitiesSavedFromGame_Sucess()
+        {
+            Database.CurrentGame.ProcessEntities();
+            Assert.IsTrue(true);
+        }
     }
 }
