@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using HearthDb;
+using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
 using HearthDb.Enums;
 using HearthstoneDeckTracker.Utilities;
@@ -14,10 +16,18 @@ namespace HearthstoneDeckTracker.Model
     {
         public static List<Deck> CurrentDecks { get; set; } = new List<Deck>();
         public static Game CurrentGame { get; set; } = new Game();
+        public static List<Game> RecordedGames { get; set; } = new List<Game>();
 
         static Database()
         {
             //AddTestDeck();
+        }
+
+        public static void EndGame()
+        {
+            CurrentGame.EndGame();
+            RecordedGames.Add(CurrentGame);
+            CurrentGame = new Game();
         }
 
         private static void AddTestDeck()
@@ -79,13 +89,38 @@ namespace HearthstoneDeckTracker.Model
 
         public static void SaveData()
         {
+            SavePlayerCreatedDecksToFile();
+            SaveRecordedGamesToFile();
+        }
+
+        private static void SavePlayerCreatedDecksToFile()
+        {
             List<string> deckStrings = CurrentDecks.Select(x => DeckSerializer.Serialize(x, true)).ToList();
             string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
             File.WriteAllLines(path, deckStrings);
-            Log.Info("Successfully saved decks to file.");
+
+            Log.Info("Successfully saved player created decks to file.");
+        }
+
+        private static void SaveRecordedGamesToFile()
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Game>));
+            string path = Config.RecordedGamesXmlFile();
+            using (TextWriter writer = new StreamWriter(path))
+            {
+                xmlSerializer.Serialize(writer, RecordedGames);
+            }
+
+            Log.Info("Successfully saved the recorded games entities to disk.");
         }
 
         public static void LoadData()
+        {
+            LoadPlayerCreatedDecksFromFile();
+            LoadRecordedGamesFromFile();
+        }
+
+        private static void LoadPlayerCreatedDecksFromFile()
         {
             string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
             List<string> lines = File.ReadAllLines(path).ToList();
@@ -110,7 +145,20 @@ namespace HearthstoneDeckTracker.Model
             }
             decksToLoad.ForEach(x => CurrentDecks.Add(DeckSerializer.Deserialize(x)));
 
-            Log.Info("Successfully loaded decks from file.");
+            Log.Info("Successfully loaded player created decks from file.");
+        }
+
+        private static void LoadRecordedGamesFromFile()
+        {
+            XmlSerializer xmlDeSerializer = new XmlSerializer(typeof(List<Game>));
+            string path = Config.RecordedGamesXmlFile();
+            using (TextReader reader = new StreamReader(path))
+            {
+                RecordedGames = (List<Game>)xmlDeSerializer.Deserialize(reader);
+                reader.Close();
+            }
+
+            Log.Info("Successfully loaded the test entities from disk.");
         }
     }
 }

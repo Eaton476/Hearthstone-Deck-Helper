@@ -15,14 +15,23 @@ namespace HearthstoneDeckTracker.Model
 {
 	public class Game
 	{
+        [XmlElement]
 		public Player User { get; set; } = new Player();
-		public Player Opponent { get; set; } = new Player();
-	    internal DateTime TimeGameStart { get; set; }
-		internal DateTime TimeGameFinish { get; set; }
-		public TimeSpan Duration => TimeGameFinish - TimeGameStart;
+	    [XmlElement]
+        public Player Opponent { get; set; } = new Player();
+	    [XmlAttribute]
+        internal DateTime TimeGameStart { get; set; }
+	    [XmlAttribute]
+        internal DateTime TimeGameFinish { get; set; }
+	    [XmlAttribute]
+        public TimeSpan Duration => TimeGameFinish - TimeGameStart;
+        [XmlIgnore]
 	    public bool GameInProgress { get; set; }
-		public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
+	    [XmlIgnore]
+        public Dictionary<int, Entity> Entities { get; set; } = new Dictionary<int, Entity>();
+	    [XmlIgnore]
         public int CurrentEntityId { get; set; }
+        [XmlAttribute]
 	    public int Turns { get; set; }
 
 	    public void StartGame()
@@ -36,22 +45,26 @@ namespace HearthstoneDeckTracker.Model
 			TimeGameFinish = DateTime.UtcNow;
 		    GameInProgress = false;
             ProcessEntities();
-            SaveGame();
 		}
 
-	    public void OutputEntitiesToLog()
+	    public void ResetGame()
+	    {
+            User = new Player();
+            Opponent = new Player();
+	        TimeGameStart = DateTime.MinValue;
+            TimeGameFinish = DateTime.MinValue;
+            Entities.Clear();
+	        CurrentEntityId = -1;
+	        Turns = 0;
+	    }
+
+        public void OutputEntitiesToLog()
 	    {
 	        foreach (var entity in Entities)
 	        {
 	            Log.Debug(entity.ToString());
 	        }
 	    }
-
-		public void SaveGame()
-		{
-		    //SaveTestEntitiesToXml();
-            
-		}
 
 	    public void SaveTestEntitiesToXml()
         { 
@@ -210,30 +223,33 @@ namespace HearthstoneDeckTracker.Model
 	        int cardType = entity.GetTag(GameTag.CARDTYPE);
 	        int controller = entity.GetTag(GameTag.CONTROLLER);
 
-	        if (controller == 1)
+	        if (card.Collectible)
 	        {
-                //Hero
-	            if (cardType == 3)
+	            if (controller == 1)
 	            {
-	                Opponent.Deck.HeroDbfId = card.DbfId;
-	                Opponent.Deck.CardsInDeck.Add(card);
-                }
-                else if (cardType != 10)
-	            {
-	                Opponent.Deck.CardsInDeck.Add(card);
+	                //Hero
+	                if (cardType == 3)
+	                {
+	                    Opponent.Deck.HeroDbfId = card.DbfId;
+	                    Opponent.Deck.CardsInDeck.Add(card);
+	                }
+	                else if (cardType != 10)
+	                {
+	                    Opponent.Deck.CardsInDeck.Add(card);
+	                }
 	            }
-	        }
-            else if (controller == 2)
-	        {
-	            //Hero
-	            if (cardType == 3)
+	            else if (controller == 2)
 	            {
-	                User.Deck.HeroDbfId = card.DbfId;
-	                User.Deck.CardsInDeck.Add(card);
-	            }
-	            else if (cardType != 10)
-	            {
-	                User.Deck.CardsInDeck.Add(card);
+	                //Hero
+	                if (cardType == 3)
+	                {
+	                    User.Deck.HeroDbfId = card.DbfId;
+	                    User.Deck.CardsInDeck.Add(card);
+	                }
+	                else if (cardType != 10)
+	                {
+	                    User.Deck.CardsInDeck.Add(card);
+	                }
 	            }
             }
 	    }

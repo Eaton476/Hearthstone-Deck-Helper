@@ -66,5 +66,10 @@ namespace HearthstoneDeckTracker.Utilities
         {
             return ConfigurationManager.AppSettings["EntityXMLFile"];
         }
+
+        public static string RecordedGamesXmlFile()
+        {
+            return ConfigurationManager.AppSettings["RecordedGamesXMLFile"].ToString();
+        }
     }
 }

@@ -51,8 +51,12 @@
     <Compile Include="PowerLogHandlerTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityTesting.cs" />
+    <Compile Include="DatabaseTesting.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

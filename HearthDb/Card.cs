@@ -15,6 +15,8 @@ namespace HearthDb
 {
 	public class Card
 	{
+        public Card() {}
+
 		public Card(Entity entity)
 		{
 			Entity = entity;
