@@ -9,25 +9,43 @@
       d:DesignHeight="637" d:DesignWidth="754"
       Title="Analytics">
     <Grid Background="LightGray">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0"
                 Background="White"
                 Margin="20"
                 CornerRadius="10"
                 Padding="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <lvc:PieChart Grid.Column="0"
-                              LegendLocation="Bottom"
-                              Series="{Binding GameResultSeries}"/>
+            <Grid Name="LeftMainGrid">
+            </Grid>
+        </Border>
+        <Border Grid.Column="1"
+                Background="White"
+                Margin="20"
+                CornerRadius="10"
+                Padding="10">
+            <Grid Name="RightMainGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0"
+                      Name="PieChartGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Game Results"
+                               TextAlignment="Center"
+                               FontWeight="Bold"/>
+                    <lvc:PieChart Grid.Row="1"
+                                  LegendLocation="Bottom"
+                                  Series="{Binding GameResultSeries}"/>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

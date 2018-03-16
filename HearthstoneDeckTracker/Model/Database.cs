@@ -14,6 +14,7 @@ using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.Utilities.Converters;
 using HearthstoneDeckTracker.ViewModel;
 using LiveCharts;
+using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 
 namespace HearthstoneDeckTracker.Model
@@ -206,6 +207,26 @@ namespace HearthstoneDeckTracker.Model
             }
             
             return seriesCollection;
+        }
+
+        public static SeriesCollection GetHeroSelectionSeries()
+        {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            SeriesCollection seriesCollection = new SeriesCollection();
+            IEnumerable<IGrouping<int, Game>> results = RecordedGames.GroupBy(x => x.User.Deck.HeroDbfId);
+
+            foreach (var result in results)
+            {
+                Card heroCard = Cards.GetFromDbfId(result.Key);
+                PieSeries series = new PieSeries
+                {
+                    Title = heroCard.Name,
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(result.Count())},
+                    DataLabels = true
+                };
+
+                seriesCollection.Add(series);
+            }
         }
     }
 }
