@@ -47,17 +47,6 @@ namespace HearthstoneDeckTracker.Model
             ProcessEntities();
 		}
 
-	    public void ResetGame()
-	    {
-            User = new Player();
-            Opponent = new Player();
-	        TimeGameStart = DateTime.MinValue;
-            TimeGameFinish = DateTime.MinValue;
-            Entities.Clear();
-	        CurrentEntityId = -1;
-	        Turns = 0;
-	    }
-
         public void OutputEntitiesToLog()
 	    {
 	        foreach (var entity in Entities)
@@ -120,11 +109,11 @@ namespace HearthstoneDeckTracker.Model
 	            {
 	                ProcessGameEntity(entity);
 	            }
-                else if (entity.Name != null && entity.Name != "EatonGaming")
+                else if (entity.Name != null && entity.Name != "EatonGaming#2462")
 	            {
                     ProcessOpponentEntity(entity);
 	            }
-                else if (entity.Name == "EatonGaming")
+                else if (entity.Name == "EatonGaming#2462")
 	            {
 	                ProcessUserEntity(entity);
 	            }
@@ -220,6 +209,7 @@ namespace HearthstoneDeckTracker.Model
 	    private void ProcessCardEntity(Entity entity)
 	    {
 	        Card card = Cards.GetCardFromId(entity.CardId);
+	        if (card == null) return;
 	        int cardType = entity.GetTag(GameTag.CARDTYPE);
 	        int controller = entity.GetTag(GameTag.CONTROLLER);
 

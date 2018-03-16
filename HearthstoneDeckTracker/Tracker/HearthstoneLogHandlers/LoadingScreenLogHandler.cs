@@ -9,14 +9,14 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 	    {
 		    if (entry.Line.Contains("Gameplay.Start()"))
 		    {
-			    Database.CurrentGame.StartGame();
+			    Database.StartGame();
 		        Log.Info("Detected that game is starting.");
 		    }
 			else if (entry.Line.Contains("Gameplay.OnDestroy()"))
 		    {
 		        if (Database.CurrentGame.GameInProgress)
 		        {
-			        Database.CurrentGame.EndGame();
+			        Database.EndGame();
 		            Log.Info("Detected that game has ended.");
 		        }
 		    }

@@ -10,7 +10,7 @@ namespace UnitTesting
         [TestInitialize]
         public void Initialise()
         {
-            Database.CurrentGame.LoadTestEntitiesFromXml();
+            Database.LoadData();
         }
 
         [TestMethod]
@@ -23,7 +23,15 @@ namespace UnitTesting
         [TestMethod]
         public void LoadingRecordedGames_XmlToGames_Success()
         {
-            Database.LoadData();
+            //Database.LoadData();
+        }
+
+        [TestMethod]
+        public void AnalyticsGameResultPieChart_Success()
+        {
+            var result = Database.GetGameResultSeries();
+
+            Assert.IsTrue(true);
         }
     }
 }

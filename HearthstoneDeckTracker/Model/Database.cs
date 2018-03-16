@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 using System.Xml.Serialization;
 using HearthDb;
 using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
 using HearthDb.Enums;
 using HearthstoneDeckTracker.Utilities;
+using HearthstoneDeckTracker.Utilities.Converters;
 using HearthstoneDeckTracker.ViewModel;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace HearthstoneDeckTracker.Model
 {
@@ -21,6 +27,11 @@ namespace HearthstoneDeckTracker.Model
         static Database()
         {
             //AddTestDeck();
+        }
+
+        public static void StartGame()
+        {
+            CurrentGame.StartGame();
         }
 
         public static void EndGame()
@@ -152,13 +163,49 @@ namespace HearthstoneDeckTracker.Model
         {
             XmlSerializer xmlDeSerializer = new XmlSerializer(typeof(List<Game>));
             string path = Config.RecordedGamesXmlFile();
-            using (TextReader reader = new StreamReader(path))
+            if (File.Exists(path))
             {
-                RecordedGames = (List<Game>)xmlDeSerializer.Deserialize(reader);
-                reader.Close();
-            }
+                using (TextReader reader = new StreamReader(path))
+                {
+                    RecordedGames = (List<Game>) xmlDeSerializer.Deserialize(reader);
+                    reader.Close();
+                }
 
-            Log.Info("Successfully loaded the test entities from disk.");
+                Log.Info("Successfully loaded recorded game data from disk.");
+            }
+            else
+            {
+                Log.Warn($"Unable to find recorded data at '{path}'");
+            }
+        }
+
+        public static SeriesCollection GetGameResultSeries()
+        {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            SeriesCollection seriesCollection = new SeriesCollection();
+            IEnumerable<IGrouping<string, Game>> results = RecordedGames.GroupBy(x => x.User.Result);
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            foreach (var result in results) 
+            {
+                if (result.Key != null)
+                {
+                    string resultName = result.Key;
+                    int value = result.Count();
+                    PieSeries series = new PieSeries
+                    {
+                        Title = textInfo.ToTitleCase(resultName.ToLower()),
+                        Values = new ChartValues<int>{value},
+                        DataLabels = true,
+                        LabelPoint = labelPoint
+                    };
+
+                    seriesCollection.Add(series);
+                }
+            }
+            
+            return seriesCollection;
         }
     }
 }

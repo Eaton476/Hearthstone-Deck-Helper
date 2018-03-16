@@ -4,6 +4,7 @@
     {
         Home = 0,
         Collection = 1,
-        Settings = 2
+        Settings = 2,
+        Analytics = 3
     }
 }

@@ -25,8 +25,6 @@ namespace HearthstoneDeckTracker
 
             Log.Initialize();
             Database.LoadData();
-
-			
         }
 
         private void CollectionButton_Click(object sender, RoutedEventArgs e)
@@ -61,6 +59,11 @@ namespace HearthstoneDeckTracker
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             _dataContext.CurrentPage = PageNumber.Settings;
+        }
+
+        private void AnalyticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            _dataContext.CurrentPage = PageNumber.Analytics;
         }
     }
 }
