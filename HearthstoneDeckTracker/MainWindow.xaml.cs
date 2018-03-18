@@ -65,5 +65,10 @@ namespace HearthstoneDeckTracker
         {
             _dataContext.CurrentPage = PageNumber.Analytics;
         }
+
+        private void SuggestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            _dataContext.CurrentPage = PageNumber.DeckImprovement;
+        }
     }
 }

@@ -23,6 +23,8 @@ namespace HearthstoneDeckTracker.Utilities.Converters
                     return new Settings();
                 case PageNumber.Analytics:
                     return new Analytics();
+                case PageNumber.DeckImprovement:
+                    return new DeckImprovement();
                 default:
                     Debugger.Break();
                     return null;

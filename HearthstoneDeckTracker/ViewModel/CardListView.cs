@@ -1,9 +1,12 @@
-﻿using HearthDb;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using HearthDb;
 using HearthDb.Enums;
+using HearthstoneDeckTracker.Annotations;
 
 namespace HearthstoneDeckTracker.ViewModel
 {
-    class CardListView
+    public class CardListView : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string Type { get; set; }
@@ -23,6 +26,14 @@ namespace HearthstoneDeckTracker.ViewModel
             Set = card.Set.ToString();
             Dbfid = card.DbfId;
 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

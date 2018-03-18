@@ -29,7 +29,7 @@
             <Button x:Name="SuggestionButton"
                     ToolTip="Improve your deck"
                     Content="{StaticResource SuggestionIcon}"
-                    Margin="0 0 0 20"/>
+                    Margin="0 0 0 20" Click="SuggestionButton_Click"/>
             <Button x:Name="AnalyticsButton"
                     ToolTip="See your performance statistics"
                     Content="{StaticResource AnalyticsIcon}"

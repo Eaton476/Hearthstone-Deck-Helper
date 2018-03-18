@@ -83,6 +83,9 @@
     <Compile Include="Pages\CollectionPage.xaml.cs">
       <DependentUpon>CollectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\DeckImprovement.xaml.cs">
+      <DependentUpon>DeckImprovement.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,7 @@
     <Compile Include="ViewModel\AnalyticsViewModel.cs" />
     <Compile Include="ViewModel\CardListView.cs" />
     <Compile Include="ViewModel\CardListViewDeck.cs" />
+    <Compile Include="ViewModel\DeckImprovmentViewModel.cs" />
     <Compile Include="ViewModel\DeckListView.cs" />
     <Compile Include="ViewModel\GameResultPieChart.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -130,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CollectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DeckImprovement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
