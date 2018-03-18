@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using HearthDb;
 using HearthDb.Enums;
+using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.ViewModel;
 
@@ -65,6 +67,52 @@ namespace HearthstoneDeckTracker.Pages
                 TxtBoxCardRarity.Text = Enum.GetName(typeof(Rarity), _viewModel.SelectedCard.Rarity) ?? throw new InvalidOperationException();
                 TxtBoxCardSet.Text = Enum.GetName(typeof(CardSet), _viewModel.SelectedCard.Set) ?? throw new InvalidOperationException();
                 CardImage.Source = image;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private async void BtnGenerateResults_Click(object sender, RoutedEventArgs e)
+        {
+            Task<List<CardSuggestion>> task = new Task<List<CardSuggestion>>(() => Database.GenerateCardSuggestions(_viewModel.SelectedCard));
+            task.Start();
+            TxtBlockResults.Text = "Generating results...";
+            _viewModel.CardSuggestions = await task;
+            TxtBlockResults.Text =
+                $"{_viewModel.CardSuggestions.Count} results generated, only the top 20 are shown below.";
+            _viewModel.CardSuggestionViews = new ObservableCollection<CardSuggestionView>(_viewModel.CardSuggestions.Select(x => new CardSuggestionView(x)));
+
+            DataGridCardChoices.ItemsSource = _viewModel.CardSuggestionViews;
+            DataGridCardChoices.Items.Refresh();
+        }
+
+        private void DataGridCardChoices_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DataGridCardChoices.SelectedItem is CardSuggestionView card)
+            {
+                _viewModel.SelectedCardSuggestion = _viewModel.CardSuggestions.First(x => x.Card.DbfId == card.Dbfid);
+                ShowGeneratedCardDetails();
+            }
+        }
+
+        private void ShowGeneratedCardDetails()
+        {
+            string imageSource = Path.Combine(Config.CardImagesFolder(), $"{_viewModel.SelectedCardSuggestion.Card.DbfId}.png");
+            if (!File.Exists(Path.Combine(Config.CardImagesFolder(), $"{_viewModel.SelectedCardSuggestion.Card.DbfId}.png")))
+            {
+                imageSource = Path.Combine(Config.CardImagesFolder(), "1688.png");
+            }
+            var image = new BitmapImage(new Uri(imageSource));
+
+            try
+            {
+                TxtBoxGenCardName.Text = _viewModel.SelectedCardSuggestion.Card.Name;
+                TxtBoxGenCardType.Text = Enum.GetName(typeof(CardType), _viewModel.SelectedCardSuggestion.Card.Type) ?? throw new InvalidOperationException();
+                TxtBoxGenCardRarity.Text = Enum.GetName(typeof(Rarity), _viewModel.SelectedCardSuggestion.Card.Rarity) ?? throw new InvalidOperationException();
+                TxtBoxCardResultsInformation.Text = _viewModel.SelectedCardSuggestion.ReasonsToString();
+                GenCardImage.Source = image;
             }
             catch (Exception e)
             {

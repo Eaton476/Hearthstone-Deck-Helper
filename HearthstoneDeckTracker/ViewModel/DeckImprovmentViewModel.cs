@@ -20,6 +20,9 @@ namespace HearthstoneDeckTracker.ViewModel
         public Deck SelectedPlayerDeck { get; set; }
         public ObservableCollection<CardListView> CardsInSelectedDeck { get; set; }
         public Card SelectedCard { get; set; }
+        public List<CardSuggestion> CardSuggestions { get; set; }
+        public ObservableCollection<CardSuggestionView> CardSuggestionViews { get; set; }
+        public CardSuggestion SelectedCardSuggestion { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

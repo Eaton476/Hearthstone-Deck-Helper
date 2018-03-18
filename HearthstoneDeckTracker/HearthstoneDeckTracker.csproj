@@ -73,6 +73,7 @@
     <Compile Include="API\API.cs" />
     <Compile Include="Enums\PageNumber.cs" />
     <Compile Include="Enums\LogType.cs" />
+    <Compile Include="Model\CardSuggestion.cs" />
     <Compile Include="Model\Database.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Player.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="ViewModel\AnalyticsViewModel.cs" />
     <Compile Include="ViewModel\CardListView.cs" />
     <Compile Include="ViewModel\CardListViewDeck.cs" />
+    <Compile Include="ViewModel\CardSuggestionView.cs" />
     <Compile Include="ViewModel\DeckImprovmentViewModel.cs" />
     <Compile Include="ViewModel\DeckListView.cs" />
     <Compile Include="ViewModel\GameResultPieChart.cs" />

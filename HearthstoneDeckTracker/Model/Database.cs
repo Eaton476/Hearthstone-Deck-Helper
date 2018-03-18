@@ -366,5 +366,179 @@ namespace HearthstoneDeckTracker.Model
 
             return seriesCollection;
         }
+
+        public static List<CardSuggestion> GenerateCardSuggestions(Card cardToEvaluate)
+        {
+            List<CardSuggestion> suggestions = new List<CardSuggestion>();
+
+            foreach (Card card in Cards.Collectible.Values)
+            {
+                if (card.Type == cardToEvaluate.Type && (card.Class == cardToEvaluate.Class || card.Class == CardClass.NEUTRAL) && cardToEvaluate != card)
+                {
+                    int points = 0;
+                    List<string> reasons = new List<string>();
+                    int opponentCount = GetOpponentCardUsage(card);
+                    int userCount = GetUserWinCardUsage(card);
+
+                    points += opponentCount;
+                    if (opponentCount > 0)
+                    {
+                        reasons.Add($"Your opponents have used this card {opponentCount} time(s) against you.");
+                    }
+                    else
+                    {
+                        reasons.Add("Unfortunately, we have no record of this card being used against you.");
+                    }
+
+                    points += userCount;
+                    if (userCount > 0)
+                    {
+                        reasons.Add($"You have used this card {userCount} time(s) in games you have won previously.");
+                    }
+                    else
+                    {
+                        reasons.Add("Unfortunately, we have no record of you winning a game with this card so far.");
+                    }
+
+                    if (card.Cost == cardToEvaluate.Cost)
+                    {
+                        points += 20;
+                        reasons.Add("Both cards have the same cost. (+20)");
+                    }
+                    else if (card.Cost < cardToEvaluate.Cost)
+                    {
+                        points += 25;
+                        reasons.Add("This card is cheaper then the card you have chosen. (+25)");
+                    }
+
+                    if (card.Class == cardToEvaluate.Class)
+                    {
+                        points += 5;
+                        reasons.Add("Both cards are in the same class. (+5)");
+                    }
+
+                    if (card.Type == CardType.MINION)
+                    {
+                        if (card.Attack > cardToEvaluate.Attack)
+                        {
+                            points += 10;
+                            reasons.Add("This card has more attack power than the chosen card. (+10)");
+                        }
+                        else if (card.Attack == cardToEvaluate.Attack)
+                        {
+                            points += 5;
+                            reasons.Add("This card has the same attack as the chosen card. (+5)");
+                        }
+                        else
+                        {
+                            points -= 5;
+                            reasons.Add("Unfortunately, this card has less attack then your chosen card. (-5)");
+                        }
+
+                        if (card.Health > cardToEvaluate.Health)
+                        {
+                            points += 10;
+                            reasons.Add("This card has more health then the chosen card. (+10)");
+                        }
+                        else if (card.Health == cardToEvaluate.Health)
+                        {
+                            points += 5;
+                            reasons.Add("This card has the same health as the chosen card. (+5)");
+                        }
+                        else
+                        {
+                            points -= 5;
+                            reasons.Add("Unfortunately, this card has less health then your chosen card. (-5)");
+                        }
+                    }
+                    else if (card.Type == CardType.WEAPON)
+                    {
+                        if (card.Durability > cardToEvaluate.Durability)
+                        {
+                            points += 10;
+                            reasons.Add("This card has more durability than the chosen card. (+10)");
+                        }
+                        else if (card.Durability == cardToEvaluate.Durability)
+                        {
+                            points += 5;
+                            reasons.Add("This card has the same durability than the chosen card. (+5)");
+                        }
+                        else
+                        {
+                            points -= 5;
+                            reasons.Add("Unfortunately, this card has less durability then your chosen card. (-5)");
+                        }
+
+
+                        if (card.Attack > cardToEvaluate.Attack)
+                        {
+                            points += 10;
+                            reasons.Add("This card has more attack power than the chosen card. (+10)");
+                        }
+                        else if (card.Attack == cardToEvaluate.Attack)
+                        {
+                            points += 5;
+                            reasons.Add("This card has the same attack as the chosen card. (+5)");
+                        }
+                        else
+                        {
+                            points -= 5;
+                            reasons.Add("Unfortunately, this card has less attack then your chosen card. (-5)");
+                        }
+                    }
+                    foreach (var mechanic in card.Mechanics)
+                    {
+                        if (cardToEvaluate.Mechanics.Contains(mechanic))
+                        {
+                            points += 10;
+                            reasons.Add($"This card has the same mechanic '{mechanic}' then your chosen card. (+10)");
+                        }
+                        else
+                        {
+                            points += 5;
+                            reasons.Add($"This card has a mechanic '{mechanic}' that your chosen card does not possess. (+5)");
+                        }
+                    }
+
+                    CardSuggestion suggestion = new CardSuggestion
+                    {
+                        Card = card,
+                        Points = points,
+                        Reasons = reasons
+                    };
+
+                    suggestions.Add(suggestion);
+                }
+            }
+
+            return suggestions.OrderByDescending(x => x.Points).Take(20).ToList();
+        }
+
+        private static int GetOpponentCardUsage(Card card)
+        {
+            int usage = 0;
+
+            foreach (Game game in RecordedGames)
+            {
+                usage += game.Opponent.Deck.CardsInDeck.Count(x => x.DbfId == card.DbfId);
+            }
+
+            return usage;
+        }
+
+        private static int GetUserWinCardUsage(Card card)
+        {
+            int usage = 0;
+
+            foreach (Game game in RecordedGames)
+            {
+                if (game.User.Result == "WON")
+                {
+                    usage += game.User.Deck.CardsInDeck.Count(x => x.DbfId == card.DbfId);
+                }
+            }
+
+            return usage;
+        }
     }
 }
