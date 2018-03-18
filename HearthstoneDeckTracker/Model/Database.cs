@@ -217,16 +217,154 @@ namespace HearthstoneDeckTracker.Model
 
             foreach (var result in results)
             {
-                Card heroCard = Cards.GetFromDbfId(result.Key);
-                PieSeries series = new PieSeries
+                Card heroCard = Cards.GetFromDbfId(result.Key, false);
+                if (heroCard != null)
                 {
-                    Title = heroCard.Name,
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(result.Count())},
-                    DataLabels = true
+                    PieSeries series = new PieSeries
+                    {
+                        Title = heroCard.Name,
+                        Values = new ChartValues<ObservableValue> { new ObservableValue(result.Count()) },
+                        DataLabels = true
+                    };
+
+                    seriesCollection.Add(series);
+                }
+            }
+
+            return seriesCollection;
+        }
+
+        public static int GetAverageMinionDeaths()
+        {
+            int numberOfValues = 0;
+            int average = 0;
+
+            foreach (var game in RecordedGames)
+            {
+                numberOfValues++;
+                average += game.User.MinionsDiedThisGame;
+            }
+
+            average = average / numberOfValues;
+            return average;
+        }
+
+        class CostValue
+        {
+            public int Cost { get; set; }
+            public int Occurance { get; set; }
+        }
+
+        public static SeriesCollection GetUserCardCostAverageSeries()
+        {
+            int totalCards = 0;
+            SeriesCollection seriesCollection = new SeriesCollection();
+            List<CostValue> costs = new List<CostValue>();
+            for (int i = 0; i <= 10; i++)
+            {
+                costs.Add(new CostValue
+                {
+                    Cost = i,
+                    Occurance = 0
+                });
+            }
+
+            foreach (Game game in RecordedGames)
+            {
+                foreach (Card card in game.User.Deck.CardsInDeck)
+                {
+                    CostValue cost;
+
+                    if (card.Cost < 10)
+                    {
+                        cost = costs.Find(x => x.Cost == card.Cost);
+                        cost.Occurance += 1;
+                    }
+                    else
+                    {
+                        cost = costs.Find(x => x.Cost == card.Cost);
+                        cost.Occurance += 1;
+                    }
+
+                    totalCards += 1;
+                }                   
+            }
+
+            foreach (CostValue cost in costs)
+            {
+                string title = cost.Cost.ToString();
+                int average = (int)Math.Round((double)(100 * cost.Occurance) / totalCards);
+                if (cost.Cost == 10)
+                {
+                    title = title + "+";
+                }
+
+                ColumnSeries series = new ColumnSeries
+                {
+                    Title = title,
+                    Values = new ChartValues<float> { average}
                 };
 
                 seriesCollection.Add(series);
             }
+
+            return seriesCollection;
+        }
+
+        public static SeriesCollection GetOpponentCardCostAverageSeries()
+        {
+            int totalCards = 0;
+            SeriesCollection seriesCollection = new SeriesCollection();
+            List<CostValue> costs = new List<CostValue>();
+            for (int i = 0; i <= 10; i++)
+            {
+                costs.Add(new CostValue
+                {
+                    Cost = i,
+                    Occurance = 0
+                });
+            }
+
+            foreach (Game game in RecordedGames)
+            {
+                foreach (Card card in game.Opponent.Deck.CardsInDeck)
+                {
+                    CostValue cost;
+
+                    if (card.Cost < 10)
+                    {
+                        cost = costs.Find(x => x.Cost == card.Cost);
+                        cost.Occurance += 1;
+                    }
+                    else
+                    {
+                        cost = costs.Find(x => x.Cost == card.Cost);
+                        cost.Occurance += 1;
+                    }
+
+                    totalCards += 1;
+                }
+            }
+
+            foreach (CostValue cost in costs)
+            {
+                string title = cost.Cost.ToString();
+                int average = (int)Math.Round((double)(100 * cost.Occurance) / totalCards);
+                if (cost.Cost == 10)
+                {
+                    title = title + "+";
+                }
+
+                ColumnSeries series = new ColumnSeries
+                {
+                    Title = title,
+                    Values = new ChartValues<float> { average }
+                };
+
+                seriesCollection.Add(series);
+            }
+
+            return seriesCollection;
         }
     }
 }

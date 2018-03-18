@@ -19,6 +19,56 @@
                 CornerRadius="10"
                 Padding="10">
             <Grid Name="LeftMainGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0"
+                      Name="TopRowGrid">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Text="User Card Cost Distribution Throughout All Games"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"/>
+                        <lvc:CartesianChart Grid.Row="1"
+                                            DisableAnimations="True"
+                                            LegendLocation="Bottom"
+                                            Series="{Binding UserCardCostAverageSeries}">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="Card Cost" Labels="{Binding CardCostLabels}"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Percentage"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="1"
+                      Name="BottomRowGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Opponent Card Cost Distribution Throughout All Games"
+                               TextAlignment="Center"
+                               FontWeight="Bold"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        DisableAnimations="True"
+                                        LegendLocation="Bottom"
+                                        Series="{Binding OpponentCardCostAverageSeries}">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Card Cost" Labels="{Binding CardCostLabels}"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Percentage"/>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
             </Grid>
         </Border>
         <Border Grid.Column="1"
@@ -44,7 +94,51 @@
                                FontWeight="Bold"/>
                     <lvc:PieChart Grid.Row="1"
                                   LegendLocation="Bottom"
-                                  Series="{Binding GameResultSeries}"/>
+                                  Series="{Binding GameResultSeries}"
+                                  DisableAnimations="True"/>
+                </Grid>
+                <Grid Grid.Row="1"
+                      Name="DoughnutChartGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Hero Selection"
+                               TextAlignment="Center"
+                               FontWeight="Bold"/>
+                    <lvc:PieChart Grid.Row="1"
+                                  LegendLocation="Bottom"
+                                  Series="{Binding HeroSelectionSeries}"
+                                  DisableAnimations="True"/>
+                </Grid>
+                <Grid Grid.Row="2"
+                      Name="AngularGaugeGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Average Minion Deaths Per Game"
+                               TextAlignment="Center"
+                               FontWeight="Bold"/>
+                    <lvc:AngularGauge Grid.Row="1"
+                                      DisableaAnimations="True"
+                                      Value="{Binding AverageMinionDeathsValue}"
+                                      FromValue="0"
+                                      ToValue="50"
+                                      LabelsStep="10"
+                                      Wedge="270"
+                                      TicksStep="10"
+                                      TicksForeground="LightGray"
+                                      Foreground="Black"
+                                      SectionsInnerRadius=".5">
+                        <lvc:AngularGauge.Sections>
+                            <lvc:AngularSection FromValue="0" ToValue="20" Fill="Green"/>
+                            <lvc:AngularSection FromValue="20" ToValue="40" Fill="Orange"/>
+                            <lvc:AngularSection FromValue="40" ToValue="50" Fill="Red"/>
+                        </lvc:AngularGauge.Sections>
+                    </lvc:AngularGauge>
                 </Grid>
             </Grid>
         </Border>

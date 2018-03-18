@@ -16,5 +16,11 @@ namespace HearthstoneDeckTracker.ViewModel
         public event PropertyChangedEventHandler PropertyChanged = (sender, args) => { };
 
         public SeriesCollection GameResultSeries => Database.GetGameResultSeries();
+        public SeriesCollection HeroSelectionSeries => Database.GetHeroSelectionSeries();
+        public int AverageMinionDeathsValue => Database.GetAverageMinionDeaths();
+        public SeriesCollection UserCardCostAverageSeries => Database.GetUserCardCostAverageSeries();
+        public SeriesCollection OpponentCardCostAverageSeries => Database.GetOpponentCardCostAverageSeries();
+
+        public string[] CardCostLabels = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+" };
     }
 }
