@@ -40,5 +40,10 @@ namespace HearthstoneDeckTracker.Pages
         {
             Database.CurrentGame.SaveTestEntitiesToXml();
         }
+
+        private void BtnImportDecks_Click(object sender, RoutedEventArgs e)
+        {
+            Database.ImportDecksFromHearthstone();
+        }
     }
 }

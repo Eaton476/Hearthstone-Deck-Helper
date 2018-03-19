@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using HearthDb;
 using HearthDb.CardDefs;
@@ -24,7 +25,7 @@ namespace HearthstoneDeckTracker.Model
         public static List<Deck> CurrentDecks { get; set; } = new List<Deck>();
         public static Game CurrentGame { get; set; } = new Game();
         public static List<Game> RecordedGames { get; set; } = new List<Game>();
-
+   
         static Database()
         {
             //AddTestDeck();
@@ -539,6 +540,72 @@ namespace HearthstoneDeckTracker.Model
             }
 
             return usage;
+        }
+
+        public static void ImportDecksFromHearthstone()
+        {
+            var decks = HearthMirror.Reflection.GetDecks();
+            List<HearthDb.Deckstrings.Deck> convertedDecks = new List<Deck>();
+            int success = 0;
+            int attempted = 0;
+
+            if (decks != null)
+            {
+                foreach (var deck in decks)
+                {
+                    if (CurrentDecks.All(x => x.Name != deck.Name))
+                    {
+                        if (deck.Cards.Count > 0)
+                        {
+                            HearthDb.Deckstrings.Deck convertedDeck = new Deck
+                            {
+                                Name = deck.Name,
+                                Format = GameTagConverter.ParseEnum<FormatType>(deck.Type.ToString()),
+                                HeroDbfId = Cards.GetCardFromId(deck.Hero).DbfId
+                            };
+                            foreach (var card in deck.Cards)
+                            {
+                                convertedDeck.CardDbfIds.Add(Cards.GetCardFromId(card.Id).DbfId, card.Count);
+                            }
+
+                            Log.Info($"Imported deck '{deck.Name}' from Hearthstone Application");
+                            success += 1;
+                            convertedDecks.Add(convertedDeck);
+                        }
+                        else
+                        {
+                            attempted += 1;
+                            Log.Error($"Unable to import deck '{deck.Name}' due to cards not being loaded in memory.");
+                        }
+                    }
+                }
+
+                CurrentDecks.AddRange(convertedDecks);
+
+                if (success == 0)
+                {
+                    MessageBox.Show(
+                        $"Unable to import decks from Hearthstone, ensure that you have opened the decks in-game before you attempt to import.",
+                        "Unable to import decks", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (success > 0 && attempted > 0)
+                {
+                    MessageBox.Show(
+                        $"{convertedDecks.Count} Decks have been successfully imported from the Hearthstone Application, however {attempted} decks were unable to be imported due to issues finding card information in memory.",
+                        "Success with warning.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else if (success > 0)
+                {
+                    MessageBox.Show(
+                        $"{convertedDecks.Count} Decks have been successfully imported from the Hearthstone Application.",
+                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("You must have Hearthstone running in order to import the decks from your collection",
+                    "Hearthstone Not Running", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

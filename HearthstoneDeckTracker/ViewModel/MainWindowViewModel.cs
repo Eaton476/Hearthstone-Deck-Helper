@@ -1,5 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using HearthDb;
+using HearthstoneDeckTracker.Annotations;
 using HearthstoneDeckTracker.Enums;
+using HearthstoneDeckTracker.Model;
+using HearthstoneDeckTracker.Utilities;
 
 namespace HearthstoneDeckTracker.ViewModel
 {
@@ -8,6 +14,8 @@ namespace HearthstoneDeckTracker.ViewModel
         private PageNumber _currentPage = PageNumber.Home;
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, args) => { };
+        public List<Card> HeroChoices => Cards.GetHeroClasses();
+        public Card SelectedHero { get; set; }
 
         public PageNumber CurrentPage
         {

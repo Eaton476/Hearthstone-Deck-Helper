@@ -69,7 +69,32 @@ namespace HearthstoneDeckTracker.Utilities
 
         public static string RecordedGamesXmlFile()
         {
-            return ConfigurationManager.AppSettings["RecordedGamesXMLFile"].ToString();
+            return ConfigurationManager.AppSettings["RecordedGamesXMLFile"];
+        }
+
+        public static string DefaultSelectedHero()
+        {
+            return ConfigurationManager.AppSettings["DefaultSelectedHero"];
+        }
+
+        public static void SetDefaultSelectedHero(string cardId)
+        {
+            try
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+
+                settings["DefaultSelectedHero"].Value = cardId;
+
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+                Log.Info($"Successfully set '{cardId}' as default hero selection.");
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
         }
     }
 }

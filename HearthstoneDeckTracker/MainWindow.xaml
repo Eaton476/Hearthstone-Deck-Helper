@@ -48,7 +48,15 @@
             <Label x:Name="lblMonitoringStatus"
                    Content="Not Recording Results"/>
             <Button x:Name="btnToggleMonitoring"
-                    Content="Toggle Monitoring" Click="btnToggleMonitoring_Click"/>
+                    Content="Toggle Monitoring" 
+                    Click="btnToggleMonitoring_Click"/>
+            <!--<Label Name="lblSelectHero"
+                   Content="What Hero Are You Using?"/>
+            <ComboBox Name="ComboBoxHeroSelection"
+                      ItemsSource="{Binding HeroChoices}"
+                      SelectedValue="{Binding SelectedHero}"
+                      DisplayMemberPath="Name" 
+                      SelectionChanged="ComboBoxHeroSelection_SelectionChanged"/>-->
         </StatusBar>
     </Grid>
 </Window>

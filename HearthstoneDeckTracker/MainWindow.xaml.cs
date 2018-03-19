@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using HearthstoneDeckTracker.Tracker;
 using System.Windows;
 using System.Windows.Controls;
+using HearthDb;
 using HearthstoneDeckTracker.Enums;
 using HearthstoneDeckTracker.Model;
 using HearthstoneDeckTracker.Utilities;
@@ -70,5 +72,11 @@ namespace HearthstoneDeckTracker
         {
             _dataContext.CurrentPage = PageNumber.DeckImprovement;
         }
+
+        //private void ComboBoxHeroSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    Database.UserHero = _dataContext.SelectedHero;
+        //    //Config.SetDefaultSelectedHero(Database.UserHero.Id);
+        //}
     }
 }

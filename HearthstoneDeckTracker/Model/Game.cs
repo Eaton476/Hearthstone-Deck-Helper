@@ -8,8 +8,10 @@ using HearthDb;
 using HearthDb.CardDefs;
 using HearthDb.Deckstrings;
 using HearthDb.Enums;
+using HearthMirror.Objects;
 using HearthstoneDeckTracker.Utilities;
 using HearthstoneDeckTracker.Utilities.Converters;
+using Card = HearthDb.Card;
 
 namespace HearthstoneDeckTracker.Model
 {
@@ -33,8 +35,10 @@ namespace HearthstoneDeckTracker.Model
         public int CurrentEntityId { get; set; }
         [XmlAttribute]
 	    public int Turns { get; set; }
+        [XmlIgnore]
+        public MatchInfo Info { get; set; }
 
-	    public void StartGame()
+        public void StartGame()
 		{
 			TimeGameStart = DateTime.UtcNow;
 		    GameInProgress = true;
@@ -210,33 +214,32 @@ namespace HearthstoneDeckTracker.Model
 	    {
 	        Card card = Cards.GetCardFromId(entity.CardId);
 	        if (card == null) return;
-	        int cardType = entity.GetTag(GameTag.CARDTYPE);
 	        int controller = entity.GetTag(GameTag.CONTROLLER);
 
 	        if (card.Collectible)
 	        {
-	            if (controller == 1)
+	            if (controller == Info.OpposingPlayer.Id)
 	            {
 	                //Hero
-	                if (cardType == 3)
+	                if (card.Type == CardType.HERO)
 	                {
 	                    Opponent.Deck.HeroDbfId = card.DbfId;
 	                    Opponent.Deck.CardsInDeck.Add(card);
 	                }
-	                else if (cardType != 10)
+	                else if (card.Type != CardType.HERO_POWER)
 	                {
 	                    Opponent.Deck.CardsInDeck.Add(card);
 	                }
 	            }
-	            else if (controller == 2)
+	            else if (controller == Info.LocalPlayer.Id)
 	            {
 	                //Hero
-	                if (cardType == 3)
+	                if (card.Type == CardType.HERO)
 	                {
 	                    User.Deck.HeroDbfId = card.DbfId;
 	                    User.Deck.CardsInDeck.Add(card);
 	                }
-	                else if (cardType != 10)
+	                else if (card.Type != CardType.HERO_POWER)
 	                {
 	                    User.Deck.CardsInDeck.Add(card);
 	                }

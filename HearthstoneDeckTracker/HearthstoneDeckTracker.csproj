@@ -199,6 +199,10 @@
       <Project>{7ED14243-E02B-4B94-AF00-A67A62C282F0}</Project>
       <Name>HearthDb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HearthMirror\HearthMirror.csproj">
+      <Project>{1694a2f8-645a-4263-a6ab-fc26323fd675}</Project>
+      <Name>HearthMirror</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

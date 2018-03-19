@@ -63,7 +63,7 @@ namespace HearthDb
 
 	    public static List<Card> GetHeroClasses()
 	    {
-	        return All.Values.Where(x => x.Type == CardType.HERO && x.Entity.CardId.Contains("HERO")).ToList();
+	        return All.Values.Where(x => x.Type == CardType.HERO && x.Entity.CardId.Contains("HERO") && x.Collectible).ToList();
 	    }
 
 	    public static Card GetCardFromId(string cardId)

@@ -139,7 +139,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
-                               Text="Why has this card been suggested?"/>
+                               Text="Why has this card been suggested?"
+                               FontWeight="Bold"/>
                     <TextBox Grid.Row="1"
                              TextWrapping="Wrap"
                              Name="TxtBoxCardResultsInformation"

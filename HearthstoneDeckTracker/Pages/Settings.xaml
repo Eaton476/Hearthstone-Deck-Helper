@@ -32,6 +32,11 @@
                         Width="200"
                         Margin="0 10 0 0"
                         HorizontalAlignment="Left" Click="BtnSaveEntities_Click"/>
+                <Button x:Name="BtnImportDecks" 
+                        Content="Import decks from Hearthstone"
+                        Width="200"
+                        Margin="0 10 0 0"
+                        HorizontalAlignment="Left" Click="BtnImportDecks_Click"/>
             </StackPanel>
         </Border>
     </Grid>

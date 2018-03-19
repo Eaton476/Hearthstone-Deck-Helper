@@ -193,7 +193,7 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
                 //D 12:05:41.2181993 GameState.DebugPrintPower() -         tag=CARDTYPE value=GAME
 
                 UpdateEntity(Database.CurrentGame.CurrentEntityId, tag, value);
-		        TagChangeActions.TagChange(Database.CurrentGame.CurrentEntityId, tag, value);
+		        //TagChangeActions.TagChange(Database.CurrentGame.CurrentEntityId, tag, value);
             }
             else if (LogEntryRegex.CreationRegexCreating.IsMatch(entry.Line))
 		    {
@@ -207,6 +207,11 @@ namespace HearthstoneDeckTracker.Tracker.HearthstoneLogHandlers
 		        }
 
 		        Database.CurrentGame.CurrentEntityId = id;
+		    }
+
+		    if (Database.CurrentGame.Info == null)
+		    {
+		        Database.CurrentGame.Info = HearthMirror.Reflection.GetMatchInfo();
 		    }
 		}
 
