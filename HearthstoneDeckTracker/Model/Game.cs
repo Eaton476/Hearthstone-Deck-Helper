@@ -42,6 +42,7 @@ namespace HearthstoneDeckTracker.Model
 		{
 			TimeGameStart = DateTime.UtcNow;
 		    GameInProgress = true;
+		    Info = null;
 		}
 
 		public void EndGame()
