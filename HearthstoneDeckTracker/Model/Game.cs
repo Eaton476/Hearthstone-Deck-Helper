@@ -22,9 +22,9 @@ namespace HearthstoneDeckTracker.Model
 	    [XmlElement]
         public Player Opponent { get; set; } = new Player();
 	    [XmlAttribute]
-        internal DateTime TimeGameStart { get; set; }
+        public DateTime TimeGameStart { get; set; }
 	    [XmlAttribute]
-        internal DateTime TimeGameFinish { get; set; }
+        public DateTime TimeGameFinish { get; set; }
 	    [XmlAttribute]
         public TimeSpan Duration => TimeGameFinish - TimeGameStart;
         [XmlIgnore]

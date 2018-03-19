@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using HearthMirror.Objects;
 using HearthstoneDeckTracker.Annotations;
 using HearthstoneDeckTracker.Model;
 using LiveCharts;
@@ -14,13 +15,12 @@ namespace HearthstoneDeckTracker.ViewModel
     public class AnalyticsViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = (sender, args) => { };
-
         public SeriesCollection GameResultSeries => Database.GetGameResultSeries();
         public SeriesCollection HeroSelectionSeries => Database.GetHeroSelectionSeries();
         public int AverageMinionDeathsValue => Database.GetAverageMinionDeaths();
         public SeriesCollection UserCardCostAverageSeries => Database.GetUserCardCostAverageSeries();
         public SeriesCollection OpponentCardCostAverageSeries => Database.GetOpponentCardCostAverageSeries();
-
-        public string[] CardCostLabels = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+" };
+        public string NumberOfGames => Database.RecordedGames.Count.ToString();
+        public string AverageGameTime => Database.GetAverageGameDuration();
     }
 }

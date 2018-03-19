@@ -607,5 +607,12 @@ namespace HearthstoneDeckTracker.Model
                     "Hearthstone Not Running", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public static string GetAverageGameDuration()
+        {
+            List<TimeSpan> timeSpans = RecordedGames.Select(x => x.Duration).ToList();
+            DateTime average = new DateTime(Convert.ToInt64(timeSpans.Average(x => x.Ticks)));
+            return average.ToLongTimeString();
+        }
     }
 }
