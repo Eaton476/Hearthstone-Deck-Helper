@@ -4,12 +4,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTesting
 {
     [TestClass]
-    public class UnitTest1
+    public class HearthMirrorTesting
     {
+
+
         [TestMethod]
         public void TestMethod1()
         {
-            var info = HearthMirror.Reflection.GetMatchInfo();
         }
     }
 }
