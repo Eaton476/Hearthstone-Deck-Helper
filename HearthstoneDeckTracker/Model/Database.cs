@@ -106,7 +106,7 @@ namespace HearthstoneDeckTracker.Model
             SaveRecordedGamesToFile();
         }
 
-        private static void SavePlayerCreatedDecksToFile()
+        public static void SavePlayerCreatedDecksToFile()
         {
             List<string> deckStrings = CurrentDecks.Select(x => DeckSerializer.Serialize(x, true)).ToList();
             string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
@@ -115,10 +115,10 @@ namespace HearthstoneDeckTracker.Model
             Log.Info("Successfully saved player created decks to file.");
         }
 
-        private static void SaveRecordedGamesToFile()
+        public static void SaveRecordedGamesToFile()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Game>));
-            string path = Config.RecordedGamesXmlFile();
+            string path = Path.Combine(Config.SavedDataFolder(), Config.RecordedGamesXmlFile());
             using (TextWriter writer = new StreamWriter(path))
             {
                 xmlSerializer.Serialize(writer, RecordedGames);
@@ -133,7 +133,13 @@ namespace HearthstoneDeckTracker.Model
             LoadRecordedGamesFromFile();
         }
 
-        private static void LoadPlayerCreatedDecksFromFile()
+        public static void ClearLoadedData()
+        {
+            RecordedGames.Clear();
+            CurrentDecks.Clear();
+        }
+
+        public static void LoadPlayerCreatedDecksFromFile()
         {
             string path = Path.Combine(Config.SavedDataFolder(), Config.SavedDecksFile());
             List<string> lines = File.ReadAllLines(path).ToList();
@@ -161,10 +167,10 @@ namespace HearthstoneDeckTracker.Model
             Log.Info("Successfully loaded player created decks from file.");
         }
 
-        private static void LoadRecordedGamesFromFile()
+        public static void LoadRecordedGamesFromFile()
         {
             XmlSerializer xmlDeSerializer = new XmlSerializer(typeof(List<Game>));
-            string path = Config.RecordedGamesXmlFile();
+            string path = Path.Combine(Config.SavedDataFolder(), Config.RecordedGamesXmlFile());
             if (File.Exists(path))
             {
                 using (TextReader reader = new StreamReader(path))

@@ -51,9 +51,11 @@ namespace UnitTesting
         }
 
         [TestMethod]
-        public void GetLocalString_EnUS_Success()
+        public void GetLocalString_EntityNameEnUS_Success()
         {
-            
+            string entityName = _testEntity.GetLocString(GameTag.CARDNAME, Locale.enUS);
+
+            Assert.IsInstanceOfType(entityName, typeof(string));
         }
     }
 }

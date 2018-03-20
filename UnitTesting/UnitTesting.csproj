@@ -59,6 +59,7 @@
     <Compile Include="EntityTesting.cs" />
     <Compile Include="DatabaseTesting.cs" />
     <Compile Include="HearthMirrorTesting.cs" />
+    <Compile Include="AnalyticsTesting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

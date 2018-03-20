@@ -151,6 +151,8 @@ namespace UnitTesting
         {
             LogEntry entry = new LogEntry("", _tagChangeShortExample);
             _fileHandler.Handle(entry);
+
+            Assert.IsTrue(true);
         }
 
         [TestMethod]
@@ -158,6 +160,8 @@ namespace UnitTesting
         {
             LogEntry entry = new LogEntry("", _tagChangeLongExample);
             _fileHandler.Handle(entry);
+
+            Assert.IsTrue(true);
         }
 
         [TestMethod]
@@ -165,6 +169,8 @@ namespace UnitTesting
         {
             LogEntry entry = new LogEntry("", _tagChangeLongUnknownExample);
             _fileHandler.Handle(entry);
+
+            Assert.IsTrue(true);
         }
     }
 }
