@@ -117,5 +117,23 @@ namespace UnitTesting
 
             Assert.IsTrue(suggestions.Any());
         }
+
+        [TestMethod]
+        public void Database_AnalyseCardSuggestions()
+        {
+            List<CardSuggestion> suggestions = new List<CardSuggestion>();
+
+            foreach (var deck in Database.CurrentDecks)
+            {
+                foreach (var card in deck.CardDbfIds)
+                {
+                    var results = Database.GenerateCardSuggestions(Cards.GetFromDbfId(card.Key));
+                    suggestions.AddRange(results);
+                }
+            }
+
+            var grouped = suggestions.GroupBy(x => x.Card);
+            var groupedResults = grouped.Select(x => new KeyValuePair<Card, int>(x.Key, x.Count())).OrderByDescending(x => x.Value).Take(10);
+        }
     }
 }

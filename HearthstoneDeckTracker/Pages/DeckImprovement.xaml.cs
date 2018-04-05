@@ -37,6 +37,11 @@ namespace HearthstoneDeckTracker.Pages
 
         private void ComboBoxCreatedDecks_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UpdateDeckView();
+        }
+
+        private void UpdateDeckView()
+        {
             _viewModel.UpdateCardsInDeckView();
             DataGridCardsInDeck.ItemsSource = _viewModel.CardsInSelectedDeck;
             DataGridCardsInDeck.Items.Refresh();
@@ -118,6 +123,37 @@ namespace HearthstoneDeckTracker.Pages
             {
                 Log.Error(e);
             }
+        }
+
+        private void BtnSwapCard_Click(object sender, RoutedEventArgs e)
+        {
+            int dbfidToRemove = _viewModel.SelectedCard.DbfId;
+            int dbfidToAdd = _viewModel.SelectedCardSuggestion.Card.DbfId;
+            var deck = Database.CurrentDecks.FirstOrDefault(x => x == _viewModel.SelectedPlayerDeck);
+
+            if (deck != null)
+            {
+                int amount = deck.CardDbfIds[dbfidToRemove];
+
+                deck.CardDbfIds.Remove(dbfidToRemove);
+                deck.CardDbfIds.Add(dbfidToAdd, amount);
+
+                UpdateDeckView();
+
+                MessageBox.Show(
+                    "The generated alternative card you have chosen has replaced the initial card you selected in your deck, remember to make the correct change in the game client.",
+                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ClearCardDisplay();
+            }
+        }
+
+        private void ClearCardDisplay()
+        {
+            TxtBoxCardName.Clear();
+            TxtBoxCardType.Clear();
+            TxtBoxCardRarity.Clear();
+            TxtBoxCardSet.Clear();
+            CardImage.Source = null;
         }
     }
 }

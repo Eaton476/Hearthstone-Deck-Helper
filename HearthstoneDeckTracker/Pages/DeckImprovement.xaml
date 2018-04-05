@@ -150,7 +150,7 @@
                 <Button Name="BtnSwapCard"
                         Content="Swap Card"
                         Margin="0 10 0 0"
-                        Grid.Row="4"/>
+                        Grid.Row="4" Click="BtnSwapCard_Click"/>
             </Grid>
         </Border>
     </Grid>
